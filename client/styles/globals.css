@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *,
+  *::after,
+  *::before {
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    overflow-x: hidden;
+    font-weight: 400;
+    min-height: 100vh;
+    line-height: 1;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #aaaaaa;
+  border: 3px solid #f0f0f0;
+  border-radius: 10px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.scrollbar-dropdown::-webkit-scrollbar {
+  width: 5px;
+}
+.scrollbar-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-dropdown::-webkit-scrollbar-thumb {
+  background-color: rgba(170, 170, 170, 0.447);
+  border: 3px solid rgba(170, 170, 170, 0.447);
+  border-radius: 15px;
+}
+
+/* css fix */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.ut-animation {
+  @apply transition-all duration-200;
+}
+
+.input {
+  @apply w-full px-4 py-3 text-sm
+  placeholder:text-xs text-colorBlack font-medium  rounded-sm outline-none ut-animation;
+}
+
+.border-normal {
+  box-shadow: 0 0 0 1px #92939c;
+}
+
+.border-error {
+  box-shadow: 0 0 0 2px rgb(255, 56, 56);
+}
+
+.border-normal:focus {
+  box-shadow: 0 0 0 1.8px #3ba58b;
+}
