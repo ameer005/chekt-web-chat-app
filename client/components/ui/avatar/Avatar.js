@@ -1,7 +1,7 @@
 import React from "react";
 
-const Avatar = () => {
-  return <div className="h-10 w-10 rounded-full bg-blue-200"></div>;
+const Avatar = ({ size = "h-10 w-10" }) => {
+  return <div className={`${size} rounded-full bg-blue-200`}></div>;
 };
 
 export default Avatar;
