@@ -13,6 +13,10 @@ const FriendsList = () => {
       <FriendCard />
       <FriendCard />
       <FriendCard />
+      <FriendCard />
+      <FriendCard />
+      <FriendCard />
+      <FriendCard />
     </div>
   );
 };

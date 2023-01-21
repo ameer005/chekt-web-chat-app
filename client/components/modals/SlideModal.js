@@ -8,10 +8,11 @@ const SlideModal = () => {
   const slideHeading = useStore((state) => state.slideHeading);
   return (
     <div
-      className={`absolute flex flex-col bg-colorBg w-full h-full transition-all duration-300 rounded-md ${
+      className={`absolute top-0 left-0 w-full h-full bg-colorBg  transition-all duration-300 rounded-md ${
         openSlideModal ? "-translate-x-0" : "-translate-x-[120%]"
       }`}
     >
+      {/* header button */}
       <header className="px-3  py-3 bg-colorWhite mb-3 rounded-md">
         <button
           onClick={() => setModalState({ openSlideModal: false })}
@@ -23,7 +24,7 @@ const SlideModal = () => {
       </header>
 
       {/* content */}
-      <div className="flex-1 rounded-md">
+      <div className="h-full rounded-md">
         {slideHeading == "Friends" && <Friends />}
       </div>
     </div>

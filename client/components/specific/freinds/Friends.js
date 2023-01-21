@@ -6,13 +6,13 @@ const Friends = () => {
   const [active, setActive] = useState("Requests");
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full">
       <div className="mb-3">
         <SearchBar />
       </div>
 
       {/* chat list */}
-      <div className="flex-1 flex flex-col bg-colorWhite rounded-md px-4 py-2">
+      <div className=" h-full bg-colorWhite rounded-md py-4">
         {/* switch buttons */}
         <div className="flex justify-center mb-5">
           <div className="flex items-center font-semibold gap-4">
@@ -36,7 +36,7 @@ const Friends = () => {
         </div>
 
         {/* Body */}
-        <div className="flex-1 px-4 overflow-y-scroll">
+        <div className="h-full overflow-y-scroll px-6 scrollbar">
           {active === "Add" && <FriendsList />}
         </div>
       </div>

@@ -17,7 +17,6 @@
   body {
     overflow-x: hidden;
     font-weight: 400;
-    min-height: 100vh;
     line-height: 1;
   }
 }
@@ -43,16 +42,17 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #fff !important;
 }
 
-.scrollbar-dropdown::-webkit-scrollbar {
-  width: 5px;
+.scrollbar::-webkit-scrollbar {
+  width: 7px;
+  height: 15px;
 }
-.scrollbar-dropdown::-webkit-scrollbar-track {
+.scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
-.scrollbar-dropdown::-webkit-scrollbar-thumb {
-  background-color: rgba(170, 170, 170, 0.447);
-  border: 3px solid rgba(170, 170, 170, 0.447);
-  border-radius: 15px;
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border: 7px solid rgba(170, 170, 170, 0.447);
+  border-radius: 2px;
 }
 
 /* css fix */
