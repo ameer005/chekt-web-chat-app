@@ -2,22 +2,22 @@ import Link from "next/link";
 import Head from "next/head";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { schemaLogin } from "@/utils/schemas";
+import { schemaValidateForgotPassword } from "@/utils/schemas";
 
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
 
-const LoginPage = () => {
+const ChangePasswordPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
   } = useForm({
-    resolver: yupResolver(schemaLogin),
+    resolver: yupResolver(schemaValidateForgotPassword),
   });
 
-  const [email, password] = watch(["email", "password"]);
+  const [otp, password] = watch(["otp", "password"]);
 
   const submiForm = (formData) => {
     console.log(formData);
@@ -39,10 +39,10 @@ const LoginPage = () => {
               <Logo />
             </div>
             <div className="font-medium mb-7 text-base">
-              <p className="mb-[-2px]">Welcome back!</p>
-              <p className="text-colorGray">
+              <p className="mb-[-2px]">Change password</p>
+              {/* <p className="text-colorGray">
                 Sign in with your credential below
-              </p>
+              </p> */}
             </div>
 
             {/* form */}
@@ -53,45 +53,42 @@ const LoginPage = () => {
               <div className="">
                 <InputField
                   errors={errors}
-                  labelText="Email"
-                  name={"email"}
+                  labelText="OTP"
+                  name={"otp"}
                   register={register}
-                  value={email}
+                  value={otp}
                 />
               </div>
-              <div className="">
+              <div>
                 <InputField
                   errors={errors}
-                  labelText="Password"
+                  labelText="New Password"
                   name={"password"}
-                  type={"password"}
                   register={register}
                   value={password}
+                  type={"password"}
                   showEye={true}
                 />
-              </div>
-              <div className="flex justify-end">
-                <Link href={"/auth/forgotpassword"}>Forgot password?</Link>
               </div>
 
               <button
                 className="py-4 text-colorWhite font-semibold text-center  rounded-md bg-colorPrimary"
                 type="submit"
               >
-                Sign in
+                Submit
               </button>
             </form>
 
             {/* bottom section */}
-            <div className="flex items-center gap-4 font-medium mb-5">
+            {/* <div className="flex items-center gap-4 font-medium mb-5">
               <div className="flex-1 h-[2px] bg-colorGray"></div>
               <div>Or</div>
               <div className="flex-1 h-[2px] bg-colorGray"></div>
-            </div>
+            </div> */}
 
             <div className="flex flex-col gap-2 items-center font-medium text-center">
-              <div>Don't have an account?</div>
-              <Link href={"/auth/signup"}>Create an account</Link>
+              <div>Didn't get the otp?</div>
+              <button>resend</button>
             </div>
           </div>
         </section>
@@ -100,4 +97,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ChangePasswordPage;

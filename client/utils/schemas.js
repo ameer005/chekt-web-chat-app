@@ -11,3 +11,16 @@ export const schemaLogin = yup.object().shape({
   email: yup.string().email().required("Please provide email"),
   password: yup.string().min(8, "Too short").required(),
 });
+
+export const schemaActivateAccount = yup.object().shape({
+  otp: yup.string().email().required("Please provide otp"),
+});
+
+export const schemaForgotPassword = yup.object().shape({
+  email: yup.string().email().required("Please provide email"),
+});
+
+export const schemaValidateForgotPassword = yup.object().shape({
+  otp: yup.string().email().required("Please provide otp"),
+  password: yup.string().min(8, "Too short").required(),
+});

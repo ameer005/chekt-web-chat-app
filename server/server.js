@@ -11,6 +11,7 @@ const connectDb = require("./db/connect");
 const errorHandlerMiddleware = require("./middleware/error/errorHandler");
 
 // routes imports
+const userRouter = require("./routes/user/userRoutes");
 
 const app = express();
 dotenv.config();
@@ -33,6 +34,8 @@ app.get("/", (req, res) => {
     message: "This is working",
   });
 });
+
+app.use("/api/v1/users", userRouter);
 
 // fallback route
 app.use((req, res) => {

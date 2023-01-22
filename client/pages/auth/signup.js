@@ -87,10 +87,9 @@ const signup = () => {
                   name={"password"}
                   register={register}
                   value={password}
+                  type="password"
+                  showEye={true}
                 />
-              </div>
-              <div className="flex justify-end">
-                <button type="button">Forgot password?</button>
               </div>
 
               <button
