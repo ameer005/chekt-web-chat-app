@@ -161,21 +161,22 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
 // validate forgot password
 exports.validateForgotPassword = catchAsync(async (req, res, next) => {
-  const { code, newPassword } = req.body;
+  const { code, password, email } = req.body;
 
-  if (!code || !newPassword) {
+  if (!code || !password || !email) {
     return next(new AppError("Please provide all values", 400));
   }
 
-  const user = await User.findOne({ resetPasswordCode: code }).select(
-    "+resetPasswordCode"
-  );
+  const user = await User.findOne({
+    resetPasswordCode: code,
+    email,
+  }).select("+resetPasswordCode");
 
   if (!user) {
     return next(new AppError("Please provide valid verification code", 400));
   }
 
-  user.password = newPassword;
+  user.password = password;
   await user.save();
 
   res.status(200).json({

@@ -3,11 +3,17 @@ import Head from "next/head";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaLogin } from "@/utils/schemas";
+import { useLogin } from "@/hooks/queries/useAuth";
+import useStore from "@/store/useStore";
 
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
+import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
 
 const LoginPage = () => {
+  const setUserEmail = useStore((state) => state.setUserEmail);
+  const { mutate, isLoading } = useLogin();
+
   const {
     register,
     handleSubmit,
@@ -20,7 +26,8 @@ const LoginPage = () => {
   const [email, password] = watch(["email", "password"]);
 
   const submiForm = (formData) => {
-    console.log(formData);
+    setUserEmail(formData.email);
+    mutate(formData);
   };
 
   return (
@@ -78,7 +85,7 @@ const LoginPage = () => {
                 className="py-4 text-colorWhite font-semibold text-center  rounded-md bg-colorPrimary"
                 type="submit"
               >
-                Sign in
+                {isLoading ? <LoadingCircle /> : "Sign in"}
               </button>
             </form>
 

@@ -1,13 +1,18 @@
-import Link from "next/link";
 import Head from "next/head";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaForgotPassword } from "@/utils/schemas";
+import useStore from "@/store/useStore";
+import { useForgotPassword } from "@/hooks/queries/useAuth";
 
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
+import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
 
 const ForgotPasswordPage = () => {
+  const setUserEmail = useStore((state) => state.setUserEmail);
+  const { mutate, isLoading } = useForgotPassword();
+
   const {
     register,
     handleSubmit,
@@ -20,7 +25,8 @@ const ForgotPasswordPage = () => {
   const [email] = watch(["email"]);
 
   const submiForm = (formData) => {
-    console.log(formData);
+    setUserEmail(formData.email);
+    mutate(formData);
   };
 
   return (
@@ -64,7 +70,7 @@ const ForgotPasswordPage = () => {
                 className="py-4 text-colorWhite font-semibold text-center  rounded-md bg-colorPrimary"
                 type="submit"
               >
-                Submit
+                {isLoading ? <LoadingCircle /> : "Submit"}
               </button>
             </form>
           </div>

@@ -1,13 +1,25 @@
-import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaActivateAccount } from "@/utils/schemas";
+import useStore from "@/store/useStore";
+import {
+  useActivateAccount,
+  useResendActivatonCode,
+} from "@/hooks/queries/useAuth";
 
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
-
+import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
 const ActivateAccountPage = () => {
+  const userEmail = useStore((state) => state.email);
+  const { mutate: activateAccount, isLoading: activateAccountLoading } =
+    useActivateAccount();
+  const { mutate: resendCode, isLoading: resendCodeLoading } =
+    useResendActivatonCode();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -16,11 +28,17 @@ const ActivateAccountPage = () => {
   } = useForm({
     resolver: yupResolver(schemaActivateAccount),
   });
+  const [code] = watch(["code"]);
 
-  const [otp] = watch(["otp"]);
+  useEffect(() => {
+    if (!userEmail) router.push("/auth/login");
+  }, []);
 
   const submiForm = (formData) => {
-    console.log(formData);
+    activateAccount({
+      email: userEmail,
+      ...formData,
+    });
   };
 
   return (
@@ -54,9 +72,10 @@ const ActivateAccountPage = () => {
                 <InputField
                   errors={errors}
                   labelText="OTP"
-                  name={"otp"}
+                  name={"code"}
+                  type="text"
                   register={register}
-                  value={otp}
+                  value={code}
                 />
               </div>
 
@@ -64,7 +83,7 @@ const ActivateAccountPage = () => {
                 className="py-4 text-colorWhite font-semibold text-center  rounded-md bg-colorPrimary"
                 type="submit"
               >
-                Submit
+                {activateAccountLoading ? <LoadingCircle /> : "Submit"}
               </button>
             </form>
 
@@ -76,8 +95,16 @@ const ActivateAccountPage = () => {
             </div> */}
 
             <div className="flex flex-col gap-2 items-center font-medium text-center">
-              <div>Didn't get the otp?</div>
-              <button>resend</button>
+              {resendCodeLoading ? (
+                <LoadingCircle />
+              ) : (
+                <>
+                  <div>Didn't get the otp?</div>
+                  <button onClick={() => resendCode({ email: userEmail })}>
+                    resend
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </section>

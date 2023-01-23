@@ -1,13 +1,18 @@
-import Link from "next/link";
 import Head from "next/head";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaValidateForgotPassword } from "@/utils/schemas";
+import { useValidateForgotPassword } from "@/hooks/queries/useAuth";
+import useStore from "@/store/useStore";
 
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
+import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
 
 const ChangePasswordPage = () => {
+  const userEmail = useStore((state) => state.email);
+  const { mutate: changePassword, isLoading: changePasswordLoading } =
+    useValidateForgotPassword();
   const {
     register,
     handleSubmit,
@@ -17,10 +22,14 @@ const ChangePasswordPage = () => {
     resolver: yupResolver(schemaValidateForgotPassword),
   });
 
-  const [otp, password] = watch(["otp", "password"]);
+  const [code, password] = watch(["code", "password"]);
 
   const submiForm = (formData) => {
     console.log(formData);
+    changePassword({
+      email: userEmail,
+      ...formData,
+    });
   };
 
   return (
@@ -54,9 +63,9 @@ const ChangePasswordPage = () => {
                 <InputField
                   errors={errors}
                   labelText="OTP"
-                  name={"otp"}
+                  name={"code"}
                   register={register}
-                  value={otp}
+                  value={code}
                 />
               </div>
               <div>
@@ -75,7 +84,7 @@ const ChangePasswordPage = () => {
                 className="py-4 text-colorWhite font-semibold text-center  rounded-md bg-colorPrimary"
                 type="submit"
               >
-                Submit
+                {changePasswordLoading ? <LoadingCircle /> : "Submit"}
               </button>
             </form>
 

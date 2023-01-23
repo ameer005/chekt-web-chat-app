@@ -18,7 +18,7 @@ const InputField = ({
     if (showPassword) {
       setTypeState("text");
     } else {
-      setTypeState("password");
+      setTypeState(type);
     }
   }, [showPassword]);
 

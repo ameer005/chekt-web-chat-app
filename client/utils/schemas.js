@@ -13,7 +13,7 @@ export const schemaLogin = yup.object().shape({
 });
 
 export const schemaActivateAccount = yup.object().shape({
-  otp: yup.string().email().required("Please provide otp"),
+  code: yup.string().required("Please provide otp"),
 });
 
 export const schemaForgotPassword = yup.object().shape({
@@ -21,6 +21,6 @@ export const schemaForgotPassword = yup.object().shape({
 });
 
 export const schemaValidateForgotPassword = yup.object().shape({
-  otp: yup.string().email().required("Please provide otp"),
+  code: yup.string().required("Please provide otp"),
   password: yup.string().min(8, "Too short").required(),
 });

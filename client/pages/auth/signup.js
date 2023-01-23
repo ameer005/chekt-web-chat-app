@@ -3,11 +3,16 @@ import Head from "next/head";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schemaSignup } from "@/utils/schemas";
+import { useSignup } from "@/hooks/queries/useAuth";
+import useStore from "@/store/useStore";
 
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
+import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
 
 const signup = () => {
+  const setUserEmail = useStore((state) => state.setUserEmail);
+  const { mutate, isLoading } = useSignup();
   const {
     register,
     handleSubmit,
@@ -25,7 +30,8 @@ const signup = () => {
   ]);
 
   const submiForm = (formData) => {
-    console.log(formData);
+    setUserEmail(formData.email);
+    mutate(formData);
   };
 
   return (
@@ -96,7 +102,7 @@ const signup = () => {
                 className="py-4 text-colorWhite font-semibold text-center  rounded-md bg-colorPrimary"
                 type="submit"
               >
-                Create an account
+                {isLoading ? <LoadingCircle /> : "Create an account"}
               </button>
             </form>
 
