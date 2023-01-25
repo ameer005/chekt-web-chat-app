@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import useAxios from "../useAxios";
 import { useRouter } from "next/router";
 import useStore from "@/store/useStore";
@@ -102,6 +102,7 @@ export const useLogin = () => {
   const router = useRouter();
   const api = useAxios();
   const setUser = useStore((state) => state.setUser);
+  const setToken = useStore((state) => state.setToken);
   const setModalState = useStore((state) => state.setModalState);
 
   const login = (userDate) => {
@@ -110,7 +111,7 @@ export const useLogin = () => {
 
   return useMutation(login, {
     onError: (error) => {
-      if (error.response.status === 403) {
+      if (error.response.status === 401) {
         router.push("/auth/activate");
       }
       setModalState({
@@ -123,9 +124,9 @@ export const useLogin = () => {
     },
     onSuccess: (data) => {
       const response = data.data;
-      console.log(response);
       localStorage.setItem("token", response.token);
       localStorage.setItem("user", JSON.stringify(response.user));
+      setToken(response.token);
       setUser(response.user);
       setModalState({ showAuthModal: false });
       router.push("/");
@@ -188,5 +189,3 @@ export const useValidateForgotPassword = () => {
     },
   });
 };
-
-// *********************************** AUTH ********************************************** //

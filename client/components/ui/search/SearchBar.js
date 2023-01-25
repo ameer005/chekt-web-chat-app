@@ -4,6 +4,8 @@ const SearchBar = ({ value, setValue }) => {
   return (
     <label className="w-full relative">
       <input
+        onChange={(e) => setValue(e.target.value)}
+        value={value}
         placeholder="Search"
         className="bg-colorWhite font-medium outline-none w-full py-[10px] px-12 rounded-full"
         type="text"

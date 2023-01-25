@@ -15,6 +15,9 @@ const userSlice = (set, get) => ({
   setUserEmail: (email) => {
     set({ email: email });
   },
+  setToken: (token) => {
+    set({ token: token });
+  },
   removeUser: () => {
     set({ user: null });
     localStorage.removeItem("user");

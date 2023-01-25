@@ -203,7 +203,7 @@ exports.getAllUser = catchAsync(async (req, res, next) => {
 
   const totalPages = Math.ceil(totalUsers / limit);
   const features = new APIFeature(
-    User.find().populate({
+    User.find({ _id: { $ne: req.user._id } }).populate({
       path: "friends",
       populate: {
         path: "user",
@@ -243,6 +243,13 @@ exports.getUser = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     user,
+  });
+});
+
+exports.getMe = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    message: "success",
+    user: req.user,
   });
 });
 
@@ -296,10 +303,6 @@ exports.handleRequest = catchAsync(async (req, res, next) => {
     return next(new AppError("Already friends", 400));
   }
 
-  if (requestToObj.status !== 1 || requesterObj.status !== 2) {
-    return next(new AppError("something is worng", 400));
-  }
-
   if (!accept) {
     me.friends.pull({ user: requester._id });
     requester.friends.pull({ user: me._id });
@@ -308,6 +311,10 @@ exports.handleRequest = catchAsync(async (req, res, next) => {
     return res.status(200).json({
       status: "success",
     });
+  }
+
+  if (requestToObj.status !== 1 || requesterObj.status !== 2) {
+    return next(new AppError("something is worng", 400));
   }
 
   requesterObj.status = 3;
@@ -329,5 +336,15 @@ exports.removeFriend = catchAsync(async (req, res, next) => {
   await Promise.all([me.save(), friend.save()]);
   res.status(200).json({
     status: "success",
+  });
+});
+
+exports.getMyRequests = catchAsync(async (req, res, next) => {
+  const users = await User.find({
+    friends: { $elemMatch: { user: req.user._id, status: 1 } },
+  });
+  res.status(200).json({
+    message: "success",
+    users,
   });
 });

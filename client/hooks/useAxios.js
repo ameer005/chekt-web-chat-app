@@ -35,7 +35,6 @@ const useAxios = () => {
     (error) => {
       if (error.response.status === 401) {
         removeUser();
-        windows.location.reload();
       }
       return Promise.reject(error);
     }

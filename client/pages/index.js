@@ -4,17 +4,20 @@ import Head from "next/head";
 import SearchBar from "@/components/ui/search/SearchBar";
 import SlideModal from "@/components/modals/SlideModal";
 import useStore from "@/store/useStore";
-import { useRouter } from "next/router";
+import { useFetchMe } from "@/hooks/queries/useUser";
 import { withProtected } from "@/hooks/routes";
 
 const Home = () => {
-  const router = useRouter();
-  const user = useStore((state) => state.user);
-  const setModalState = useStore((state) => state.setModalState);
+  const openSlideModal = useStore((state) => state.openSlideModal);
+  const { refetch } = useFetchMe();
 
-  // useEffect(() => {
-  //   if (!user) router.push("/auth/login");
-  // }, []);
+  useEffect(() => {
+    if (openSlideModal) {
+      console.log("yo");
+      refetch();
+    }
+  }, [openSlideModal]);
+
   return (
     <>
       <Head>
@@ -36,6 +39,7 @@ const Home = () => {
               sdfdf sdfd sdf dsfsdf dfsdfd
             </div>
           </div>
+
           <SlideModal />
         </div>
 

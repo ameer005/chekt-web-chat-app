@@ -12,6 +12,8 @@ const {
   getUser,
   removeFriend,
   sendRequest,
+  getMe,
+  getMyRequests,
 } = require("../../controllers/user/userController");
 
 const router = express.Router();
@@ -21,7 +23,9 @@ router.route("/login").post(login);
 router.route("/sendActivationCode").post(sendActivationCode);
 router.route("/forgotPassword").post(forgotPassword);
 router.route("/validateForgotPassword").post(validateForgotPassword);
-router.route("/").get(getAllUser);
+router.route("/me").get(authenticateUser, getMe);
+router.route("/").get(authenticateUser, getAllUser);
+router.route("/get-my-requests").get(authenticateUser, getMyRequests);
 
 router.route("/:id").get(getUser);
 router.route("/send-request/:id").patch(authenticateUser, sendRequest);
