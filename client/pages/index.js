@@ -1,11 +1,20 @@
+import { useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Head from "next/head";
 import SearchBar from "@/components/ui/search/SearchBar";
 import SlideModal from "@/components/modals/SlideModal";
 import useStore from "@/store/useStore";
+import { useRouter } from "next/router";
+import { withProtected } from "@/hooks/routes";
 
 const Home = () => {
+  const router = useRouter();
+  const user = useStore((state) => state.user);
   const setModalState = useStore((state) => state.setModalState);
+
+  // useEffect(() => {
+  //   if (!user) router.push("/auth/login");
+  // }, []);
   return (
     <>
       <Head>
@@ -23,7 +32,9 @@ const Home = () => {
             </div>
 
             {/* chat list */}
-            <div className="h-full bg-colorWhite rounded-md"></div>
+            <div className="h-full bg-colorWhite rounded-md">
+              sdfdf sdfd sdf dsfsdf dfsdfd
+            </div>
           </div>
           <SlideModal />
         </div>
@@ -35,4 +46,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default withProtected(Home);

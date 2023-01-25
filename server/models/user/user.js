@@ -41,9 +41,16 @@ const userSchema = new mongoose.Schema({
   accountActivated: {
     type: Boolean,
     default: false,
+    select: false,
   },
-  activationCode: String,
-  resetPasswordCode: String,
+  activationCode: {
+    type: String,
+    select: false,
+  },
+  resetPasswordCode: {
+    type: String,
+    select: false,
+  },
   friends: [
     {
       user: {
@@ -53,7 +60,7 @@ const userSchema = new mongoose.Schema({
       status: {
         type: Number,
         default: 0,
-        enum: [0, 1, 2, 3],
+        enum: [0, 1, 2, 3], // add requested pending friends
       },
     },
   ],

@@ -12,9 +12,10 @@ class APIFeature {
 
     // making titles and altTitles case insenstive for search
     for (let query in queryObj) {
-      if (query === "title" || query === "altTitles" || query === "genres") {
-        queryObj[query] = { $regex: queryObj[query], $options: "i" };
-      }
+      // if (query === "title" || query === "altTitles" || query === "genres") {
+      //   queryObj[query] = { $regex: queryObj[query], $options: "i" };
+      // }
+      queryObj[query] = { $regex: queryObj[query], $options: "i" };
     }
 
     // coverting comparison syntax to mongo accespted syntax syntax
