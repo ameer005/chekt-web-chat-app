@@ -25,6 +25,8 @@ exports.signUp = catchAsync(async (req, res, next) => {
     return next(new AppError("Please choose different username", 400));
   }
 
+  let avatarUrl = `https://api.dicebear.com/5.x/avataaars/svg?seed=${username}`;
+
   const otp = generateOtp();
   const user = await User.create({
     email,
@@ -32,6 +34,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
     password,
     activationCode: otp,
     name,
+    picture: avatarUrl,
     // adminAccess: true,
   });
 

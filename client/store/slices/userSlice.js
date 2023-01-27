@@ -9,6 +9,7 @@ const userSlice = (set, get) => ({
   user: user || null,
   token: token || null,
   email: "",
+  requests: [],
   setUser: (user) => {
     set({ user: user });
   },
@@ -17,6 +18,9 @@ const userSlice = (set, get) => ({
   },
   setToken: (token) => {
     set({ token: token });
+  },
+  setRequest: (requests) => {
+    set({ requests: requests });
   },
   removeUser: () => {
     set({ user: null });

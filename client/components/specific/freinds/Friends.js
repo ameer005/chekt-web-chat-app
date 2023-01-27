@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useFetchInfiniteUsers } from "@/hooks/queries/useUser";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
+import useStore from "@/store/useStore";
 
 import SearchBar from "@/components/ui/search/SearchBar";
 import UsersList from "@/components/lists/users/UsersList";
@@ -9,7 +10,7 @@ const Friends = () => {
   const [active, setActive] = useState("Requests");
   const [searchValue, setSearchValue] = useState("");
   const [filterValue, setFilterValue] = useState("");
-
+  const requests = useStore((state) => state.requests);
   const {
     data: searchData,
     hasNextPage: searchHasNextPage,
@@ -86,7 +87,11 @@ const Friends = () => {
         <div className="h-full overflow-y-scroll px-6 scrollbar">
           {active === "Add" && <> {renderInfiniteSearchPages()} </>}
 
-          {active === "Requests" && <div>Yo friends</div>}
+          {active === "Requests" && (
+            <div>
+              <UsersList data={requests} />
+            </div>
+          )}
         </div>
       </div>
     </div>

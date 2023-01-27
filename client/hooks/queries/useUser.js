@@ -107,10 +107,15 @@ export const useRemoveFriend = () => {
 
 export const useFetchRequestsList = () => {
   const api = useAxios();
-
+  const setRequest = useStore((state) => state.setRequest);
   const fetchRequestsList = () => {
     return api.get("/users/get-my-requests");
   };
 
-  return useQuery(["users"], fetchRequestsList);
+  return useQuery(["users"], fetchRequestsList, {
+    onSuccess: (data) => {
+      const response = data.data;
+      setRequest(response.users);
+    },
+  });
 };

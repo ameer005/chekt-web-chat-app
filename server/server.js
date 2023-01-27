@@ -12,6 +12,8 @@ const errorHandlerMiddleware = require("./middleware/error/errorHandler");
 
 // routes imports
 const userRouter = require("./routes/user/userRoutes");
+const chatRouter = require("./routes/chat/chatRoutes");
+const messageRouter = require("./routes/message/messageRoutes");
 
 const app = express();
 dotenv.config();
@@ -36,6 +38,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/chats", chatRouter);
+app.use("/api/v1/messages", messageRouter);
 
 // fallback route
 app.use((req, res) => {

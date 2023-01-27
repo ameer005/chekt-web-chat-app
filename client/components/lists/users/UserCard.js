@@ -23,7 +23,7 @@ const FriendCard = ({ data }) => {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <Avatar size="w-11 h-11" />
+        <Avatar size="w-11 h-11" img={data?.picture} />
         <div>
           <div className="font-semibold">{data.name}</div>
           <div className="text-[11px]">{data.username}</div>
@@ -35,7 +35,7 @@ const FriendCard = ({ data }) => {
         {!friendshipStatus && (
           <button
             onClick={() => sendRequest(data?._id)}
-            className="py-2 w-[4rem] px-2 text-colorWhite bg-colorPrimary hover:brightness-110 ut-animation rounded-lg"
+            className="py-2 w-[5rem] px-2 text-colorWhite bg-colorPrimary hover:brightness-110 ut-animation rounded-lg"
           >
             {sendRequestLoading ? <LoadingCircle /> : "Add"}
           </button>
