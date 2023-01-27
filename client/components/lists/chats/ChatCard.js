@@ -2,7 +2,7 @@ import Avatar from "@/components/ui/avatar/Avatar";
 
 const ChatCard = () => {
   return (
-    <div className="items-center flex gap-3">
+    <div className="items-center flex gap-3 cursor-pointer">
       <div>
         <Avatar size="h-12 w-12" />
       </div>

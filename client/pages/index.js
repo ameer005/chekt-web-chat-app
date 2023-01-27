@@ -26,26 +26,27 @@ const Home = () => {
         <title>Chekt Web</title>
       </Head>
 
-      <div className="h-screen overflow-hidden flex gap-1 px-8 py-6">
+      <div className="h-screen flex gap-1 px-8 py-6">
         {/* left box */}
-        <div className="w-full max-w-[27rem] relative">
-          <Header />
-          {/* main box */}
-          <div className="px-2 h-full">
-            <div className="mb-3">
-              <SearchBar />
+        <div className="w-full overflow-hidden max-w-[27rem] relative">
+          <div className="absolute top-0 left-0 w-full h-full flex flex-col ">
+            <div>
+              <Header />
+              <div className="mb-3">
+                <SearchBar />
+              </div>
             </div>
 
             {/* chat list */}
-            <div className="h-full bg-colorWhite rounded-md px-5 py-5 bg-red-400 ">
-              <div className="h-full bg-blue-300 my-10 ">yo</div>
+            <div className="flex-1 bg-colorWhite rounded-md px-6 py-6 overflow-y-scroll scrollbar">
+              <ChatsList />
             </div>
           </div>
 
           <SlideModal />
         </div>
 
-        {/* right box */}
+        {/* messages box */}
         <div className="flex-1 bg-colorWhite rounded-r-md"></div>
       </div>
     </>
