@@ -1,8 +1,18 @@
 const mongoose = require("mongoose");
 
+const memberSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "User",
+    },
+  },
+  { _id: false }
+);
+
 const chatSchema = new mongoose.Schema(
   {
-    members: [String],
+    members: [memberSchema],
   },
   { timestamps: true }
 );

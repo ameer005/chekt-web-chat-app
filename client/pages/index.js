@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Head from "next/head";
+import { useFetchMe, useFetchRequestsList } from "@/hooks/queries/useUser";
+import { useFetchChats } from "@/hooks/queries/useChat";
+
+import useStore from "@/store/useStore";
 import SearchBar from "@/components/ui/search/SearchBar";
 import SlideModal from "@/components/modals/SlideModal";
-import useStore from "@/store/useStore";
-import { useFetchMe, useFetchRequestsList } from "@/hooks/queries/useUser";
 import { withProtected } from "@/hooks/routes";
 import ChatsList from "@/components/lists/chats/ChatsList";
 
@@ -12,8 +14,14 @@ const Home = () => {
   const openSlideModal = useStore((state) => state.openSlideModal);
   const { refetch } = useFetchMe();
   const { refetch: refetchRequestList } = useFetchRequestsList();
+  const {
+    data: chatsData,
+    isLoading: chatsLoading,
+    refetch: refetchChats,
+  } = useFetchChats();
 
   useEffect(() => {
+    refetchChats();
     if (openSlideModal) {
       refetch();
       refetchRequestList();
@@ -37,9 +45,8 @@ const Home = () => {
               </div>
             </div>
 
-            {/* chat list */}
-            <div className="flex-1 bg-colorWhite rounded-md px-6 py-6 overflow-y-scroll scrollbar">
-              <ChatsList />
+            <div className="flex-1 bg-colorWhite rounded-md py-4 overflow-y-scroll scrollbar">
+              <ChatsList data={chatsData?.data.chats} />
             </div>
           </div>
 

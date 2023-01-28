@@ -86,6 +86,7 @@ export const useHandleRequest = () => {
   return useMutation(handleRequest, {
     onSuccess: () => {
       queryClient.invalidateQueries("users");
+      queryClient.invalidateQueries("chats");
     },
   });
 };
@@ -94,8 +95,9 @@ export const useRemoveFriend = () => {
   const api = useAxios();
   const queryClient = useQueryClient();
 
-  const removeFriend = (userId) => {
-    return api.patch(`/users/remove-friend/${userId}`);
+  const removeFriend = (payload) => {
+    const { userId, data } = payload;
+    return api.patch(`/users/remove-friend/${userId}`, data);
   };
 
   return useMutation(removeFriend, {

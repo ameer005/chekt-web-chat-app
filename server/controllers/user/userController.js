@@ -1,4 +1,5 @@
 const User = require("../../models/user/user");
+const Chat = require("../../models/chat/chat");
 const catchAsync = require("../../utils/catchAsync/catchAsync");
 const AppError = require("../../utils/appError/appError");
 const APIFeature = require("../../utils/apiFeatures/apiFeatures");
@@ -323,6 +324,9 @@ exports.handleRequest = catchAsync(async (req, res, next) => {
   requesterObj.status = 3;
   requestToObj.status = 3;
   await Promise.all([me.save(), requester.save()]);
+  await Chat.create({
+    members: [{ user: me._id }, { user: requester._id }],
+  });
 
   res.status(200).json({
     status: "success",
@@ -332,11 +336,14 @@ exports.handleRequest = catchAsync(async (req, res, next) => {
 exports.removeFriend = catchAsync(async (req, res, next) => {
   const me = await User.findById(req.user._id);
   const friend = await User.findById(req.params.id);
+  const { chatId } = req.body;
 
   me.friends.pull({ user: friend._id });
   friend.friends.pull({ user: me._id });
 
   await Promise.all([me.save(), friend.save()]);
+  await Chat.findByIdAndDelete(chatId);
+
   res.status(200).json({
     status: "success",
   });

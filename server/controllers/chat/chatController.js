@@ -6,7 +6,7 @@ exports.createChat = catchAsync(async (req, res, next) => {
   const { memberId1, memberId2 } = req.body;
 
   const chat = await Chat.create({
-    members: [memberId1, memberId2],
+    members: [{ user: memberId1 }, { user: memberId2 }],
   });
 
   res.status(200).json({
@@ -16,7 +16,16 @@ exports.createChat = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllChats = catchAsync(async (req, res, next) => {
-  const chats = await Chat.find({ friends: { $in: req.user._id.toString } });
+  const chats = await Chat.find({
+    members: { $elemMatch: { user: req.user._id } },
+  }).populate({
+    path: "members",
+    populate: {
+      path: "user",
+      model: "User",
+      select: "-friends -adminAccess -__v -email",
+    },
+  });
   res.status(200).json({
     message: "success",
     chats,

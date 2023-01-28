@@ -9,6 +9,7 @@ import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
 
 const FriendCard = ({ data }) => {
   const user = useStore((state) => state.user);
+  const chats = useStore((state) => state.chats);
   const { mutate: sendRequest, isLoading: sendRequestLoading } =
     useSendRequest();
   const { mutate: handleRequest, isLoading: handleRequestLoading } =
@@ -19,6 +20,15 @@ const FriendCard = ({ data }) => {
   const friendshipStatus = user.friends.find(
     (u) => u.user.toString() == data._id.toString()
   );
+
+  const handleRemoveFriend = () => {
+    const chat = chats.find(
+      (chat) =>
+        chat.members[0].user._id == data._id ||
+        chat.members[1].user._id == data._id
+    );
+    removeFriend({ userId: data._id, data: { chatId: chat._id } });
+  };
 
   return (
     <div className="flex items-center justify-between">
@@ -75,7 +85,7 @@ const FriendCard = ({ data }) => {
         )}
         {friendshipStatus?.status == 3 && (
           <button
-            onClick={() => removeFriend(data._id)}
+            onClick={() => handleRemoveFriend()}
             className="py-2 w-[5rem] px-2 bg-gray-100 hover:brightness-95 ut-animation rounded-lg"
           >
             {removeFriendLoading ? <LoadingCircle /> : "Remove"}

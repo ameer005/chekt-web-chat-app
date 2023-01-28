@@ -28,9 +28,9 @@ const Header = () => {
         >
           <FaUserPlus className="h-5 w-5 text-colorGray hover:text-colorBlack ut-animation" />
         </button>
-        {requests.length !== 0 && (
+        {requests?.length !== 0 && (
           <div className="text-center h-4 w-4 text-[8px] font-semibold text-colorWhite bg-accentColor rounded-full absolute right-0 top-0 -translate-y-[20%] translate-x-[30%]">
-            {requests.length}
+            {requests?.length}
           </div>
         )}
       </div>

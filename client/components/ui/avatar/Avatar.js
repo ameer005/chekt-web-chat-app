@@ -6,7 +6,7 @@ const Avatar = ({ size = "h-10 w-10", img }) => {
     <div
       className={`${size} rounded-full bg-colorPrimary relative overflow-hidden`}
     >
-      <Image src={img} fill className="h-full w-full" />
+      <Image alt="user" src={img} fill className="h-full w-full" />
       {/* <img src={img} alt="avatar" className="h-full w-full" /> */}
     </div>
   );
