@@ -9,6 +9,7 @@ import SearchBar from "@/components/ui/search/SearchBar";
 import SlideModal from "@/components/modals/SlideModal";
 import { withProtected } from "@/hooks/routes";
 import ChatsList from "@/components/lists/chats/ChatsList";
+import MessageBox from "@/components/ui/messageBox/MessageBox";
 
 const Home = () => {
   const openSlideModal = useStore((state) => state.openSlideModal);
@@ -34,7 +35,7 @@ const Home = () => {
         <title>Chekt Web</title>
       </Head>
 
-      <div className="h-screen flex gap-1 px-8 py-6">
+      <div className="h-screen flex gap-2 px-8 py-6">
         {/* left box */}
         <div className="w-full overflow-hidden max-w-[27rem] relative">
           <div className="absolute top-0 left-0 w-full h-full flex flex-col ">
@@ -54,7 +55,9 @@ const Home = () => {
         </div>
 
         {/* messages box */}
-        <div className="flex-1 bg-colorWhite rounded-r-md"></div>
+        <div className="flex-1 relative overflow-hidden">
+          <MessageBox />
+        </div>
       </div>
     </>
   );
