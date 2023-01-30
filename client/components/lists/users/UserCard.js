@@ -27,7 +27,7 @@ const FriendCard = ({ data }) => {
         chat.members[0].user._id == data._id ||
         chat.members[1].user._id == data._id
     );
-    removeFriend({ userId: data._id, data: { chatId: chat._id } });
+    removeFriend({ userId: data._id, data: { chatId: chat?._id } });
   };
 
   return (

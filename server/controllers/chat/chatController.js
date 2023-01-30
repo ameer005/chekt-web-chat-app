@@ -26,6 +26,7 @@ exports.getAllChats = catchAsync(async (req, res, next) => {
       select: "-friends -adminAccess -__v -email",
     },
   });
+
   res.status(200).json({
     message: "success",
     chats,

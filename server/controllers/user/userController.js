@@ -1,5 +1,6 @@
 const User = require("../../models/user/user");
 const Chat = require("../../models/chat/chat");
+const Message = require("../../models/message/message");
 const catchAsync = require("../../utils/catchAsync/catchAsync");
 const AppError = require("../../utils/appError/appError");
 const APIFeature = require("../../utils/apiFeatures/apiFeatures");
@@ -343,6 +344,7 @@ exports.removeFriend = catchAsync(async (req, res, next) => {
 
   await Promise.all([me.save(), friend.save()]);
   await Chat.findByIdAndDelete(chatId);
+  await Message.deleteMany({ chatId: chatId });
 
   res.status(200).json({
     status: "success",

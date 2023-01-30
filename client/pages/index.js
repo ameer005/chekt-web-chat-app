@@ -13,6 +13,7 @@ import MessageBox from "@/components/ui/messageBox/MessageBox";
 
 const Home = () => {
   const openSlideModal = useStore((state) => state.openSlideModal);
+  const activeChat = useStore((state) => state.activeChat);
   const { refetch } = useFetchMe();
   const { refetch: refetchRequestList } = useFetchRequestsList();
   const {
@@ -56,7 +57,11 @@ const Home = () => {
 
         {/* messages box */}
         <div className="flex-1 relative overflow-hidden">
-          <MessageBox />
+          {activeChat ? (
+            <MessageBox />
+          ) : (
+            <div className="h-full bg-colorWhite"></div>
+          )}
         </div>
       </div>
     </>

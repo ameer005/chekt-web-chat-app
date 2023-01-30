@@ -16,7 +16,7 @@ const Header = () => {
           setOptions({ slideHeading: "Profile" });
         }}
       >
-        <Avatar img={user.picture} />
+        <Avatar img={user?.picture} />
       </div>
 
       <div className="relative">

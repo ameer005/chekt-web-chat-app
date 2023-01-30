@@ -48,7 +48,7 @@ export const useFetchMe = () => {
     return api.get("/users/me");
   };
 
-  return useQuery(["users", user._id], fetchMe, {
+  return useQuery(["users", user?._id], fetchMe, {
     onSuccess: (data) => {
       const response = data.data;
       localStorage.setItem("user", JSON.stringify(response.user));

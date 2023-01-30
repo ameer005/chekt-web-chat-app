@@ -3,13 +3,19 @@ import useStore from "@/store/useStore";
 
 const ChatCard = ({ data }) => {
   const user = useStore((state) => state.user);
+  const setOptions = useStore((state) => state.setOptions);
 
   const { user: chatUser } = data.members.find(
     (member) => member.user._id !== user._id
   );
 
   return (
-    <div className="hover:bg-colorBg px-6 ml-2 pt-2">
+    <div
+      onClick={() =>
+        setOptions({ activeChat: { chatId: data._id, userId: chatUser._id } })
+      }
+      className="hover:bg-colorBg px-6 ml-2 pt-2"
+    >
       <div className="items-center flex gap-3 cursor-pointer ">
         <div>
           <Avatar size="h-12 w-12" img={chatUser.picture} />
@@ -20,7 +26,7 @@ const ChatCard = ({ data }) => {
             {/* <div className="text-xs font-medium">09:00</div> */}
           </div>
           <p className="text-xs text-colorGray line-clamp-1">
-            sdfadsf ds asd ffd
+            {data.latestMessage || "..."}
           </p>
         </div>
       </div>
