@@ -1,5 +1,12 @@
 // module imports
 const express = require("express");
+const app = express();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: ["http://localhost:3000"],
+  },
+});
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const cors = require("cors");
@@ -15,7 +22,6 @@ const userRouter = require("./routes/user/userRoutes");
 const chatRouter = require("./routes/chat/chatRoutes");
 const messageRouter = require("./routes/message/messageRoutes");
 
-const app = express();
 dotenv.config();
 
 // GLOBAL MIDDLEWARES
@@ -49,6 +55,32 @@ app.use((req, res) => {
   });
 });
 
+// socket
+let users = [];
+
+const addUser = (userData, socketId) => {
+  !users.some((user) => user._id == userData._id) &&
+    users.push({ ...userData, socketId });
+};
+
+const getUser = (userId) => {
+  return users.find((user) => user._id === userId);
+};
+
+io.on("connection", (socket) => {
+  console.log("user connected");
+
+  socket.on("add-users", (userData) => {
+    addUser(userData, socket.id);
+    io.emit("get-users", users);
+  });
+
+  socket.on("send-message", (data) => {
+    const user = getUser(data.reciever);
+    io.to(user?.socketId).emit("get-message", data);
+  });
+});
+
 // GLOBAL ERROR HANDELING
 app.use(errorHandlerMiddleware);
 
@@ -57,7 +89,7 @@ const port = process.env.PORT || 5000;
 const start = async () => {
   try {
     await connectDb(process.env.MONGO_URL);
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   } catch (error) {

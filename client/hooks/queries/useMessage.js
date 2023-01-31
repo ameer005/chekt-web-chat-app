@@ -2,6 +2,7 @@ import useStore from "@/store/useStore";
 import {
   useInfiniteQuery,
   useMutation,
+  useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
 import useAxios from "../useAxios";
@@ -16,11 +17,14 @@ import useAxios from "../useAxios";
 //   return useQuery(["messages", chatId], queryfnc);
 // };
 
-export const useFetchInfiniteMessage = (params) => {
-  const { chatId } = useStore((state) => state.activeChat);
+export const useFetchInfiniteMessage = (chatId) => {
   const api = useAxios();
   const queryFnc = ({ queryKey, pageParam = 1 }) => {
-    return api.get(`/messages/${queryKey[1]}?page=${pageParam}`);
+    return api.get(`/messages/${queryKey[1]}?page=${pageParam}`, {
+      params: {
+        limit: 7,
+      },
+    });
   };
 
   return useInfiniteQuery(["messages", chatId], queryFnc, {
@@ -33,7 +37,17 @@ export const useFetchInfiniteMessage = (params) => {
   });
 };
 
+export const useFetchMessages = (chatId) => {
+  const api = useAxios();
+  const queryFnc = ({ queryKey }) => {
+    return api.get(`/messages/${queryKey[1]}`);
+  };
+
+  return useQuery(["messages", chatId], queryFnc);
+};
+
 export const useSendMessage = () => {
+  const socket = useStore((state) => state.socket);
   const api = useAxios();
   const queryClient = useQueryClient();
   const queryfnc = (payload) => {
@@ -42,9 +56,11 @@ export const useSendMessage = () => {
   };
 
   return useMutation(queryfnc, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("messages");
+    onSuccess: (data) => {
+      const response = data.data;
+      socket.emit("send-message", response.message);
       queryClient.invalidateQueries("chats");
+      queryClient.invalidateQueries("messages");
     },
   });
 };

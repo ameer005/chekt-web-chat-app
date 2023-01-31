@@ -13,6 +13,10 @@ import MessageBox from "@/components/ui/messageBox/MessageBox";
 
 const Home = () => {
   const openSlideModal = useStore((state) => state.openSlideModal);
+  const user = useStore((state) => state.user);
+  const setDataState = useStore((state) => state.setDataState);
+
+  const socket = useStore((state) => state.socket);
   const activeChat = useStore((state) => state.activeChat);
   const { refetch } = useFetchMe();
   const { refetch: refetchRequestList } = useFetchRequestsList();
@@ -29,6 +33,13 @@ const Home = () => {
       refetchRequestList();
     }
   }, [openSlideModal]);
+
+  useEffect(() => {
+    socket.emit("add-users", user);
+    socket.on("get-users", (users) => {
+      setDataState({ activeUsers: users });
+    });
+  }, [user]);
 
   return (
     <>

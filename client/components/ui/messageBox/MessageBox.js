@@ -2,10 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import EmojiPicker from "emoji-picker-react";
 import useCloseDropdown from "@/hooks/useCloseDropdown";
 import { useFetchUser } from "@/hooks/queries/useUser";
-import {
-  useFetchInfiniteMessage,
-  useSendMessage,
-} from "@/hooks/queries/useMessage";
+import { useFetchMessages, useSendMessage } from "@/hooks/queries/useMessage";
 
 import { IoIosSend } from "react-icons/io";
 import { BsEmojiSmile } from "react-icons/bs";
@@ -15,22 +12,23 @@ import useStore from "@/store/useStore";
 
 const MessageBox = () => {
   const activeChat = useStore((state) => state.activeChat);
-  const {
-    data: messagesData,
-    hasNextPage: messagesHasNextPage,
-    isLoading: messagesIsLoading,
-    isFetchingNextPage: messagesIsFetchingNextPage,
-    fetchNextPage: messagesFetchNextPage,
-  } = useFetchInfiniteMessage(activeChat.chatId);
+  const activeUsers = useStore((state) => state.activeUsers);
+  const socket = useStore((state) => state.socket);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [value, setValue] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState(null);
+  let emojiRef = useRef(null);
+  const scrollRef = useRef(null);
+
+  const { data: messagesData, isLoading: messagesIsLoading } = useFetchMessages(
+    activeChat.chatId
+  );
   const { mutate: sendMessage } = useSendMessage();
   const { data: userData, isSuccess: userDataSuccess } = useFetchUser(
     activeChat.userId
   );
   const selectedUser = userData?.data?.user;
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [value, setValue] = useState("");
-  let emojiRef = useRef(null);
-  const scrollRef = useRef(null);
 
   useCloseDropdown({
     isOpen: showEmojiPicker,
@@ -39,18 +37,18 @@ const MessageBox = () => {
   });
 
   useEffect(() => {
-    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+    setMessages(messagesData?.data?.messages);
   }, [messagesData]);
 
-  const renderInfiniteMessagePages = () => {
-    return messagesData?.pages.map((page, index) => {
-      return <MessagesList key={index} data={page?.data.messages} />;
-    });
-  };
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messagesData, messages]);
 
-  const onEmojiClick = (data) => {
-    setValue((prev) => prev + data.emoji);
-  };
+  useEffect(() => {
+    socket.on("get-message", (data) => {
+      setMessages((prev) => [...prev, data]);
+    });
+  }, []);
 
   const submitForm = (e) => {
     e.preventDefault();
@@ -60,10 +58,10 @@ const MessageBox = () => {
       chatId: activeChat.chatId,
       data: {
         text: value,
+        reciever: selectedUser._id,
       },
     });
 
-    console.log(value);
     setValue("");
   };
 
@@ -71,28 +69,34 @@ const MessageBox = () => {
   if (!userDataSuccess) return;
 
   return (
-    <div className="flex flex-col absolute top-0 left-0 w-full h-full">
-      <header className="bg-colorWhite py-2 px-4 mb-3 rounded-md">
+    <div className="absolute top-0 left-0 flex h-full w-full flex-col">
+      <header className="bg-colorWhite mb-3 rounded-md py-2 px-4">
         <div className="flex items-center gap-3">
           <Avatar img={selectedUser?.picture} />
 
-          <h1 className="font-semibold">{selectedUser?.name}</h1>
+          <div>
+            <h1 className="font-semibold">{selectedUser?.name}</h1>
+            <div className="text-xs text-gray-400">
+              {activeUsers?.find((user) => user._id == selectedUser?._id) &&
+                "Online"}
+            </div>
+          </div>
         </div>
       </header>
 
       {/* messages list box */}
-      <div className=" flex-1 flex flex-col gap-4 bg-colorWhite px-6 pt-5 overflow-y-scroll scrollbar">
+      <div className=" bg-colorWhite scrollbar flex flex-1 flex-col gap-4 overflow-y-scroll px-6 pt-5">
         {/* <MessagesList /> */}
-        {renderInfiniteMessagePages()}
+        <MessagesList data={messages} />
         <div ref={scrollRef}></div>
       </div>
 
       {/* footer */}
       <form
         onSubmit={submitForm}
-        className="flex items-end gap-3 bg-colorWhite px-6 py-5 relative"
+        className="bg-colorWhite relative flex items-end gap-3 px-6 py-5"
       >
-        <label className="flex-1 flex gap-3 items-center bg-colorBg rounded-full px-6">
+        <label className="bg-colorBg flex flex-1 items-center gap-3 rounded-full px-6">
           <button>
             <BsEmojiSmile
               onClick={(e) => {
@@ -105,19 +109,21 @@ const MessageBox = () => {
           <textarea
             onChange={(e) => setValue(e.target.value)}
             value={value}
-            className="flex-1 h-[3.5rem] font-medium py-4 resize-none outline-none bg-transparent text-sm"
+            className="h-[3.5rem] flex-1 resize-none bg-transparent py-4 text-sm font-medium outline-none"
             type="text"
           />
         </label>
 
-        <button className="p-3 rounded-full bg-colorPrimary hover:brightness-110 ut-animation">
-          <IoIosSend className="h-7 w-7 text-colorWhite" />
+        <button className="bg-colorPrimary ut-animation rounded-full p-3 hover:brightness-110">
+          <IoIosSend className="text-colorWhite h-7 w-7" />
         </button>
 
         <div ref={emojiRef}>
           {showEmojiPicker && (
-            <div className="absolute -top-[100%] -translate-y-[80%] left-7">
-              <EmojiPicker onEmojiClick={onEmojiClick} />
+            <div className="absolute -top-[100%] left-7 -translate-y-[80%]">
+              <EmojiPicker
+                onEmojiClick={(data) => setValue((prev) => prev + data.emoji)}
+              />
             </div>
           )}
         </div>

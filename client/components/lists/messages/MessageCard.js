@@ -28,7 +28,7 @@ const MessageCard = ({ data, nextData }) => {
     return (
       <div className={`flex ${!decreaseM && "mb-4"}`}>
         <div className="flex-1"></div>
-        <div className="self-end font-medium  max-w-[60%] bg-colorSecondary text-colorWhite p-4 leading-5 rounded-l-3xl rounded-b-3xl relative">
+        <div className="self-end font-medium min-w-[4rem]  max-w-[60%] bg-colorSecondary text-colorWhite p-4 leading-5 rounded-l-3xl rounded-b-3xl relative">
           <p>{data?.text}</p>
           <div className="absolute bottom-0 translate-y-[130%] text-gray-400 text-xs right-2">
             {timestamp}

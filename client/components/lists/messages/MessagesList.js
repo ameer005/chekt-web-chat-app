@@ -5,7 +5,7 @@ const MessagesList = ({ data }) => {
     return data?.map((message, index) => {
       return (
         <MessageCard
-          key={message._id}
+          key={message?._id}
           data={message}
           nextData={data[index + 1]}
         />
