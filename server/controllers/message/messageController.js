@@ -3,10 +3,31 @@ const Chat = require("../../models/chat/chat");
 const catchAsync = require("../../utils/catchAsync/catchAsync");
 const AppError = require("../../utils/appError/appError");
 const APIFeature = require("../../utils/apiFeatures/apiFeatures");
+const { b2Upload } = require("../../utils/upload/fileUpload");
 
 exports.createMessage = catchAsync(async (req, res, next) => {
   const { chatId } = req.params;
   const { text, reciever } = req.body;
+
+  if (req.file) {
+    const file = await b2Upload(req.file);
+
+    if (!file) {
+      return next(new AppError("can't upload file", 400));
+    }
+
+    const message = await Message.create({
+      chatId,
+      file,
+      sender: req.user._id.toString(),
+      reciever,
+    });
+
+    return res.status(200).json({
+      status: "success",
+      message,
+    });
+  }
 
   if (!text) {
     return next(new AppError("Please provide all values", 400));

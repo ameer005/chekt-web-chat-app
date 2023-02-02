@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import EmojiPicker from "emoji-picker-react";
 import useCloseDropdown from "@/hooks/useCloseDropdown";
@@ -6,10 +7,13 @@ import { useFetchMessages, useSendMessage } from "@/hooks/queries/useMessage";
 import { useFetchChats } from "@/hooks/queries/useChat";
 
 import { IoIosSend } from "react-icons/io";
+import { GrAttachment } from "react-icons/gr";
 import { BsEmojiSmile } from "react-icons/bs";
 import Avatar from "../avatar/Avatar";
 import MessagesList from "@/components/lists/messages/MessagesList";
 import useStore from "@/store/useStore";
+import LoadingCircle from "../LoadingSpinners/LoadingCircle";
+import LoadingCircleBig from "../LoadingSpinners/LoadingCircleBig";
 
 const MessageBox = () => {
   const activeChat = useStore((state) => state.activeChat);
@@ -17,6 +21,8 @@ const MessageBox = () => {
   const socket = useStore((state) => state.socket);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [value, setValue] = useState("");
+  const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState(null);
   let emojiRef = useRef(null);
@@ -25,11 +31,17 @@ const MessageBox = () => {
   const { data: messagesData, isLoading: messagesIsLoading } = useFetchMessages(
     activeChat.chatId
   );
-  const { mutate: sendMessage } = useSendMessage();
+  const {
+    mutate: sendMessage,
+    isLoading: sendMessageLoading,
+    isSuccess: sendMessageSuccess,
+  } = useSendMessage();
   const { refetch: refetchChats } = useFetchChats();
-  const { data: userData, isSuccess: userDataSuccess } = useFetchUser(
-    activeChat.userId
-  );
+  const {
+    data: userData,
+    isSuccess: userDataSuccess,
+    isLoading: userDataLoading,
+  } = useFetchUser(activeChat.userId);
   const selectedUser = userData?.data?.user;
 
   useCloseDropdown({
@@ -37,6 +49,16 @@ const MessageBox = () => {
     setIsOpen: setShowEmojiPicker,
     ref: emojiRef,
   });
+
+  useEffect(() => {
+    if (sendMessageSuccess) {
+      setImagePreview(null);
+    }
+
+    if (file) {
+      submitForm();
+    }
+  }, [sendMessageSuccess, file]);
 
   useEffect(() => {
     setMessages(messagesData?.data?.messages);
@@ -56,6 +78,7 @@ const MessageBox = () => {
   useEffect(() => {
     if (
       messages[messages.length - 1] &&
+      newMessage?.sender === selectedUser._id &&
       newMessage?._id !== messages[messages.length - 1]._id
     ) {
       setMessages((prev) => [...prev, newMessage]);
@@ -63,22 +86,40 @@ const MessageBox = () => {
   }, [newMessage]);
 
   const submitForm = (e) => {
-    e.preventDefault();
-    if (!value) return;
+    e?.preventDefault();
 
-    sendMessage({
-      chatId: activeChat.chatId,
-      data: {
-        text: value,
-        reciever: selectedUser._id,
-      },
-    });
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("reciever", selectedUser._id);
+      sendMessage({
+        chatId: activeChat.chatId,
+        data: formData,
+      });
+      setImagePreview(URL.createObjectURL(file));
+      setFile(null);
+    } else {
+      if (!value) return;
 
-    setValue("");
+      sendMessage({
+        chatId: activeChat.chatId,
+        data: {
+          text: value,
+          reciever: selectedUser._id,
+        },
+      });
+
+      setValue("");
+    }
   };
 
-  // TODO temp fix
-  if (!userDataSuccess) return;
+  if (messagesIsLoading || userDataLoading) {
+    return (
+      <div className="absolute top-0 left-0 flex h-full w-full flex-col items-center justify-center">
+        <LoadingCircleBig />
+      </div>
+    );
+  }
 
   return (
     <div className="absolute top-0 left-0 flex h-full w-full flex-col">
@@ -101,6 +142,26 @@ const MessageBox = () => {
         {/* <MessagesList /> */}
         <MessagesList data={messages} />
         <div ref={scrollRef}></div>
+
+        {/* Image preview TODO will make separate component in future */}
+        {imagePreview && (
+          <div className={`mb-4 flex`}>
+            <div className="flex-1"></div>
+            <div className=" text-colorWhite r relative min-w-[4rem] max-w-[60%] self-end p-4 font-medium leading-5">
+              <div className="relative h-[15rem] w-[10rem]">
+                <Image
+                  alt={"image"}
+                  src={imagePreview}
+                  fill
+                  className="h-full w-full"
+                />
+                <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
+                  <LoadingCircle />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* footer */}
@@ -124,6 +185,15 @@ const MessageBox = () => {
             className="h-[3.5rem] flex-1 resize-none bg-transparent py-4 text-sm font-medium outline-none"
             type="text"
           />
+          <label>
+            <input
+              onChange={(e) => setFile(e.target.files[0])}
+              className="hidden"
+              type="file"
+              accept="image/jpeg,image/png"
+            />
+            <GrAttachment className="h-5 w-5 cursor-pointer" />
+          </label>
         </label>
 
         <button className="bg-colorPrimary ut-animation rounded-full p-3 hover:brightness-110">

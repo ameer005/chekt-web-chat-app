@@ -1,3 +1,4 @@
+import Image from "next/image";
 import useStore from "@/store/useStore";
 import moment from "moment";
 
@@ -28,9 +29,27 @@ const MessageCard = ({ data, nextData }) => {
     return (
       <div className={`flex ${!decreaseM && "mb-4"}`}>
         <div className="flex-1"></div>
-        <div className="self-end font-medium min-w-[4rem]  max-w-[60%] bg-colorSecondary text-colorWhite p-4 leading-5 rounded-l-3xl rounded-b-3xl relative">
-          <p>{data?.text}</p>
-          <div className="absolute bottom-0 translate-y-[130%] text-gray-400 text-xs right-2">
+        <div
+          className={`${
+            data.file
+              ? "bg-black"
+              : "bg-colorSecondary rounded-l-3xl rounded-b-3xl"
+          }  text-colorWhite relative min-w-[4rem] max-w-[60%] self-end  p-4 font-medium leading-5`}
+        >
+          {data.file ? (
+            <div className="h-[15rem] w-[10rem]">
+              <Image
+                alt={"image"}
+                src={data.file}
+                fill
+                className="h-full w-full object-contain"
+              />
+            </div>
+          ) : (
+            <p>{data?.text}</p>
+          )}
+
+          <div className="absolute bottom-0 right-2 translate-y-[130%] text-xs text-gray-400">
             {timestamp}
           </div>
         </div>
@@ -40,9 +59,24 @@ const MessageCard = ({ data, nextData }) => {
     let [timestamp, decreaseM] = renderTimeStamp(data);
     return (
       <div className={`flex ${!decreaseM && "mb-4"}`}>
-        <div className="font-medium max-w-[60%] bg-colorBg p-4 leading-5 rounded-r-3xl rounded-b-3xl relative">
-          <p>{data?.text}</p>
-          <div className="absolute bottom-0 translate-y-[130%] text-gray-400 text-xs left-2">
+        <div
+          className={`${
+            data.file ? "bg-black" : "bg-colorBg  rounded-r-3xl rounded-b-3xl "
+          } relative min-w-[4rem] max-w-[60%] p-4 font-medium leading-5`}
+        >
+          {data.file ? (
+            <div className="h-[15rem] w-[10rem]">
+              <Image
+                alt={"image"}
+                src={data.file}
+                fill
+                className="h-full w-full object-contain"
+              />
+            </div>
+          ) : (
+            <p>{data?.text}</p>
+          )}
+          <div className="absolute bottom-0 left-2 translate-y-[130%] text-xs text-gray-400">
             {timestamp}
           </div>
         </div>

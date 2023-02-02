@@ -7,7 +7,11 @@ export const useFetchChats = () => {
   const setDataState = useStore((state) => state.setDataState);
 
   const queryFnc = () => {
-    return api.get("/chats");
+    return api.get("/chats", {
+      params: {
+        sort: "-updatedAt",
+      },
+    });
   };
 
   return useQuery(["chats"], queryFnc, {
