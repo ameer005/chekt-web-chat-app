@@ -58,9 +58,9 @@ export const useSendMessage = () => {
   return useMutation(queryfnc, {
     onSuccess: (data) => {
       const response = data.data;
-      socket.emit("send-message", response.message);
       queryClient.invalidateQueries("chats");
       queryClient.invalidateQueries("messages");
+      socket.emit("send-message", response.message);
     },
   });
 };

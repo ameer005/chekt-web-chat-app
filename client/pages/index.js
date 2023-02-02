@@ -47,10 +47,10 @@ const Home = () => {
         <title>Chekt Web</title>
       </Head>
 
-      <div className="h-screen flex gap-2 px-8 py-6">
+      <div className="flex h-screen gap-2 px-8 py-6">
         {/* left box */}
-        <div className="w-full overflow-hidden max-w-[27rem] relative">
-          <div className="absolute top-0 left-0 w-full h-full flex flex-col ">
+        <div className="relative min-w-[18rem] flex-1 overflow-hidden">
+          <div className="absolute top-0 left-0 flex h-full w-full flex-col ">
             <div>
               <Header />
               <div className="mb-3">
@@ -58,7 +58,7 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="flex-1 bg-colorWhite rounded-md py-4 overflow-y-scroll scrollbar">
+            <div className="bg-colorWhite scrollbar flex-1 overflow-y-scroll rounded-md py-4">
               <ChatsList data={chatsData?.data.chats} />
             </div>
           </div>
@@ -67,11 +67,11 @@ const Home = () => {
         </div>
 
         {/* messages box */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="relative w-full max-w-[64rem] overflow-hidden">
           {activeChat ? (
             <MessageBox />
           ) : (
-            <div className="h-full bg-colorWhite"></div>
+            <div className="bg-colorWhite h-full"></div>
           )}
         </div>
       </div>

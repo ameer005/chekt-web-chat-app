@@ -3,6 +3,7 @@ import EmojiPicker from "emoji-picker-react";
 import useCloseDropdown from "@/hooks/useCloseDropdown";
 import { useFetchUser } from "@/hooks/queries/useUser";
 import { useFetchMessages, useSendMessage } from "@/hooks/queries/useMessage";
+import { useFetchChats } from "@/hooks/queries/useChat";
 
 import { IoIosSend } from "react-icons/io";
 import { BsEmojiSmile } from "react-icons/bs";
@@ -25,6 +26,7 @@ const MessageBox = () => {
     activeChat.chatId
   );
   const { mutate: sendMessage } = useSendMessage();
+  const { refetch: refetchChats } = useFetchChats();
   const { data: userData, isSuccess: userDataSuccess } = useFetchUser(
     activeChat.userId
   );
@@ -46,9 +48,19 @@ const MessageBox = () => {
 
   useEffect(() => {
     socket.on("get-message", (data) => {
-      setMessages((prev) => [...prev, data]);
+      setNewMessage(data);
+      refetchChats();
     });
   }, []);
+
+  useEffect(() => {
+    if (
+      messages[messages.length - 1] &&
+      newMessage?._id !== messages[messages.length - 1]._id
+    ) {
+      setMessages((prev) => [...prev, newMessage]);
+    }
+  }, [newMessage]);
 
   const submitForm = (e) => {
     e.preventDefault();
