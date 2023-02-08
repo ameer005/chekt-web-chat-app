@@ -59,7 +59,7 @@ app.use((req, res) => {
 let users = [];
 
 const addUser = (userData, socketId) => {
-  !users.some((user) => user._id == userData._id) &&
+  !users.some((user) => user._id == userData?._id) &&
     users.push({ ...userData, socketId });
 };
 

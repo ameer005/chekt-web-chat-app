@@ -121,3 +121,18 @@ export const useFetchRequestsList = () => {
     },
   });
 };
+
+export const useChangePicture = () => {
+  const api = useAxios();
+  const queryClient = useQueryClient();
+
+  const queryFnc = (data) => {
+    return api.patch(`/users/change-picture`, data);
+  };
+
+  return useMutation(queryFnc, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("users");
+    },
+  });
+};

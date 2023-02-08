@@ -9,6 +9,7 @@ const {
   sendForgotPasswordCode,
 } = require("../../utils/email/email");
 const generateOtp = require("../../utils/otp/generateOTP");
+const { b2Upload } = require("../../utils/upload/fileUpload");
 
 exports.signUp = catchAsync(async (req, res, next) => {
   const { name, username, password, email } = req.body;
@@ -358,5 +359,25 @@ exports.getMyRequests = catchAsync(async (req, res, next) => {
   res.status(200).json({
     message: "success",
     users,
+  });
+});
+
+exports.changeProfilePicture = catchAsync(async (req, res, next) => {
+  if (!req.file) return next(new AppError("Please provide image", 400));
+
+  const picture = await b2Upload(req.file);
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { picture },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  res.status(200).json({
+    message: "success",
+    user,
   });
 });

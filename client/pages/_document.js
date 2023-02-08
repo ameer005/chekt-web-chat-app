@@ -17,6 +17,7 @@ export default function Document() {
       </Head>
       <body className="bg-colorBg">
         <Main />
+        <div id="crop-modal"></div>
         <NextScript />
       </body>
     </Html>
