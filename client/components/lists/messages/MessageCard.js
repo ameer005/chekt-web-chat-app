@@ -1,6 +1,9 @@
 import Image from "next/image";
 import useStore from "@/store/useStore";
 import moment from "moment";
+import { saveAs } from "file-saver";
+
+import { MdFileDownload } from "react-icons/md";
 
 const MessageCard = ({ data, nextData }) => {
   const user = useStore((state) => state.user);
@@ -24,6 +27,11 @@ const MessageCard = ({ data, nextData }) => {
     return [timestamp, decreaseM];
   };
 
+  const downloadImage = () => {
+    const imageName = data.file.split("/").at(-1);
+    saveAs(data.file, imageName);
+  };
+
   if (data?.sender === user._id.toString()) {
     let [timestamp, decreaseM] = renderTimeStamp(data);
     return (
@@ -37,13 +45,20 @@ const MessageCard = ({ data, nextData }) => {
           }  text-colorWhite relative min-w-[4rem] max-w-[60%] self-end  p-4 font-medium leading-5`}
         >
           {data.file ? (
-            <div className="h-[15rem] w-[10rem]">
+            <div className="relative h-[15rem] w-[10rem]">
               <Image
                 alt={"image"}
                 src={data.file}
                 fill
                 className="h-full w-full object-contain"
               />
+
+              <button
+                onClick={downloadImage}
+                className="absolute -top-2 -right-2"
+              >
+                <MdFileDownload className="h-5 w-5" />
+              </button>
             </div>
           ) : (
             <p>{data?.text}</p>
@@ -65,13 +80,20 @@ const MessageCard = ({ data, nextData }) => {
           } relative min-w-[4rem] max-w-[60%] p-4 font-medium leading-5`}
         >
           {data.file ? (
-            <div className="h-[15rem] w-[10rem]">
+            <div className="relative h-[15rem] w-[10rem]">
               <Image
                 alt={"image"}
                 src={data.file}
                 fill
                 className="h-full w-full object-contain"
               />
+
+              <button
+                onClick={downloadImage}
+                className="absolute -top-2 -right-2"
+              >
+                <MdFileDownload className="text-colorWhite h-5 w-5" />
+              </button>
             </div>
           ) : (
             <p>{data?.text}</p>

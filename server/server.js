@@ -67,6 +67,10 @@ const getUser = (userId) => {
   return users.find((user) => user._id === userId);
 };
 
+const removeUser = (userId) => {
+  users = users.filter((user) => user.socketId !== userId);
+};
+
 io.on("connection", (socket) => {
   console.log("user connected");
 
@@ -78,6 +82,11 @@ io.on("connection", (socket) => {
   socket.on("send-message", (data) => {
     const user = getUser(data.reciever);
     io.to(user?.socketId).emit("get-message", data);
+  });
+
+  socket.on("disconnect", () => {
+    removeUser(socket.id);
+    io.emit("get-users", users);
   });
 });
 
