@@ -23,7 +23,7 @@ const UserProfile = () => {
     <div className="mt-6 h-full">
       <div className="flex justify-center">
         <div className="absolute ">
-          <Avatar size="h-[12rem] w-[12rem]" img={user.picture} />
+          <Avatar size="h-[12rem] w-[12rem]" img={user?.picture} />
           <label className="ut-animation absolute top-0 left-0 z-10 flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-black/0 text-transparent hover:bg-black/40 hover:text-white">
             <MdEdit className="h-8 w-8 " />
             <input

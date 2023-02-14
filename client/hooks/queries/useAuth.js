@@ -111,7 +111,7 @@ export const useLogin = () => {
 
   return useMutation(login, {
     onError: (error) => {
-      if (error.response.status === 401) {
+      if (error.response.status === 403) {
         router.push("/auth/activate");
       }
       setModalState({
