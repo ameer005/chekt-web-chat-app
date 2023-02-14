@@ -32,7 +32,7 @@ const MessageCard = ({ data, nextData }) => {
     saveAs(data.file, imageName);
   };
 
-  if (data?.sender === user._id.toString()) {
+  if (data?.sender === user?._id.toString()) {
     let [timestamp, decreaseM] = renderTimeStamp(data);
     return (
       <div className={`flex ${!decreaseM && "mb-4"}`}>

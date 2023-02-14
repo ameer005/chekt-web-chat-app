@@ -9,6 +9,8 @@ import { useFetchChats } from "@/hooks/queries/useChat";
 import { IoIosSend } from "react-icons/io";
 import { GrAttachment } from "react-icons/gr";
 import { BsEmojiSmile } from "react-icons/bs";
+import { BiArrowBack } from "react-icons/bi";
+
 import Avatar from "../avatar/Avatar";
 import MessagesList from "@/components/lists/messages/MessagesList";
 import useStore from "@/store/useStore";
@@ -18,6 +20,7 @@ import LoadingCircleBig from "../LoadingSpinners/LoadingCircleBig";
 const MessageBox = () => {
   const activeChat = useStore((state) => state.activeChat);
   const activeUsers = useStore((state) => state.activeUsers);
+  const setOptions = useStore((state) => state.setOptions);
   const socket = useStore((state) => state.socket);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [value, setValue] = useState("");
@@ -122,10 +125,18 @@ const MessageBox = () => {
   }
 
   return (
-    <div className="absolute top-0 left-0 flex h-full w-full flex-col">
-      <header className="bg-colorWhite mb-3 rounded-md py-2 px-4">
+    <div className="bg-colorBg absolute top-0 left-0 flex h-full w-full flex-col">
+      <header className="bg-colorWhite mb-3 rounded-md py-3 px-4">
         <div className="flex items-center gap-3">
-          <Avatar img={selectedUser?.picture} />
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setOptions({ activeChat: null })}
+              className="hidden lg:block"
+            >
+              <BiArrowBack className={"h-6 w-6"} />
+            </button>
+            <Avatar img={selectedUser?.picture} />
+          </div>
 
           <div>
             <h1 className="font-semibold">{selectedUser?.name}</h1>
@@ -169,7 +180,7 @@ const MessageBox = () => {
         onSubmit={submitForm}
         className="bg-colorWhite relative flex items-end gap-3 px-6 py-5"
       >
-        <label className="bg-colorBg flex flex-1 items-center gap-3 rounded-full px-6">
+        <label className="bg-colorBg flex flex-1 items-center gap-3 rounded-full px-6 sm:px-2">
           <button>
             <BsEmojiSmile
               onClick={(e) => {

@@ -14,7 +14,7 @@ const ChatCard = ({ data }) => {
       onClick={() =>
         setOptions({ activeChat: { chatId: data._id, userId: chatUser._id } })
       }
-      className="hover:bg-colorBg ml-2 px-6 pt-2"
+      className="hover:bg-colorBg ml-2 px-6 pt-2 sm:px-2"
     >
       <div className="flex cursor-pointer items-center gap-3 ">
         <div>

@@ -17,7 +17,7 @@ const FriendCard = ({ data }) => {
   const { mutate: removeFriend, isLoading: removeFriendLoading } =
     useRemoveFriend();
 
-  const friendshipStatus = user.friends.find(
+  const friendshipStatus = user?.friends.find(
     (u) => u.user.toString() == data._id.toString()
   );
 

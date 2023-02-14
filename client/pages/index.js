@@ -47,9 +47,9 @@ const Home = () => {
         <title>Chekt Web</title>
       </Head>
 
-      <div className="flex h-screen gap-2 px-8 py-6">
+      <div className="relative flex h-screen gap-2 px-8 py-6 sm:px-3 sm:py-3">
         {/* left box */}
-        <div className="relative min-w-[18rem] flex-1 overflow-hidden">
+        <div className="relative min-w-[22rem] flex-1 overflow-hidden sm:min-w-0">
           <div className="absolute top-0 left-0 flex h-full w-full flex-col ">
             <div>
               <Header />
@@ -67,13 +67,24 @@ const Home = () => {
         </div>
 
         {/* messages box */}
-        <div className="relative w-full max-w-[64rem] overflow-hidden">
+        <div className="relative w-full max-w-[64rem] overflow-hidden lg:hidden">
           {activeChat ? (
             <MessageBox />
           ) : (
             <div className="bg-colorWhite h-full"></div>
           )}
         </div>
+
+        {/* Smallers screens */}
+        {activeChat ? (
+          <div className="relative hidden w-full max-w-[64rem] overflow-hidden lg:fixed lg:top-0 lg:left-0 lg:bottom-0 lg:right-0 lg:block">
+            {activeChat ? (
+              <MessageBox />
+            ) : (
+              <div className="bg-colorWhite h-full"></div>
+            )}
+          </div>
+        ) : null}
       </div>
     </>
   );

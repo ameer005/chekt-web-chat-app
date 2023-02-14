@@ -8,6 +8,15 @@ module.exports = {
     fontFamily: {
       exo: ["Exo", "sans-serif"],
     },
+    screens: {
+      "3xl": { max: "1300px" },
+      "2xl": { max: "1200px" },
+      xl: { max: "1000px" },
+      lg: { max: "850px" },
+      md: { max: "650px" },
+      sm: { max: "500px" },
+      xs: { max: "340px" },
+    },
     extend: {
       colors: {
         colorPrimary: "#3ba58b",

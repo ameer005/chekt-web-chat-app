@@ -43,7 +43,7 @@ const CropModal = ({ setShowCropModal, image, mutate }) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-colorWhite relative w-full max-w-[30rem]"
+        className="bg-colorWhite relative w-full max-w-[30rem] md:mx-3"
       >
         <div className="px-4 py-2">
           <IoClose
@@ -52,7 +52,7 @@ const CropModal = ({ setShowCropModal, image, mutate }) => {
           />
         </div>
 
-        <div className="relative h-[25rem]">
+        <div className="relative h-[25rem] sm:h-[20rem]">
           <Cropper
             aspect={5 / 5}
             minZoom={1}
