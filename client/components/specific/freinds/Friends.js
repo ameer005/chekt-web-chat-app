@@ -1,23 +1,19 @@
 import { useState, useEffect } from "react";
 import { useFetchInfiniteUsers } from "@/hooks/queries/useUser";
-import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import useStore from "@/store/useStore";
 
 import SearchBar from "@/components/ui/search/SearchBar";
 import UsersList from "@/components/lists/users/UsersList";
+import NotFound from "@/components/ui/notFound/NotFound";
+import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
 
 const Friends = () => {
   const [active, setActive] = useState("Requests");
   const [searchValue, setSearchValue] = useState("");
   const [filterValue, setFilterValue] = useState("");
   const requests = useStore((state) => state.requests);
-  const {
-    data: searchData,
-    hasNextPage: searchHasNextPage,
-    isLoading: searchIsLoading,
-    isFetchingNextPage: searchIsFetchingNextPage,
-    fetchNextPage: searchFetchNextPage,
-  } = useFetchInfiniteUsers({ ...filterValue });
+  const { data: searchData, isLoading: searchIsLoading } =
+    useFetchInfiniteUsers({ ...filterValue });
 
   const renderInfiniteSearchPages = () => {
     return searchData?.pages.map((page, index) => {
@@ -57,10 +53,10 @@ const Friends = () => {
       </div>
 
       {/* chat list */}
-      <div className=" h-full bg-colorWhite rounded-md py-4">
+      <div className=" bg-colorWhite h-full rounded-md py-4">
         {/* switch buttons */}
-        <div className="flex justify-center mb-5">
-          <div className="flex items-center font-semibold gap-4">
+        <div className="mb-5 flex justify-center">
+          <div className="flex items-center gap-4 font-semibold">
             <button
               onClick={() => {
                 setActive("Requests");
@@ -84,12 +80,26 @@ const Friends = () => {
         </div>
 
         {/* Body */}
-        <div className="h-full overflow-y-scroll px-6 scrollbar">
-          {active === "Add" && <> {renderInfiniteSearchPages()} </>}
+        <div className="scrollbar h-full overflow-y-scroll px-6">
+          {active === "Add" && (
+            <>
+              {searchIsLoading ? (
+                <div className="flex justify-center">
+                  <LoadingCircle />
+                </div>
+              ) : (
+                renderInfiniteSearchPages()
+              )}
+            </>
+          )}
 
           {active === "Requests" && (
             <div>
-              <UsersList data={requests} />
+              {requests.length == 0 ? (
+                <NotFound message={"No requests"} />
+              ) : (
+                <UsersList data={requests} />
+              )}
             </div>
           )}
         </div>
