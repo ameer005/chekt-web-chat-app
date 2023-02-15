@@ -1,7 +1,7 @@
 import axios from "axios";
 import useStore from "../store/useStore";
 
-let URL = "https://chekt-backend.vercel.app/api/v1";
+let URL = "https://chekt-backend.up.railway.app/api/v1";
 
 if (process.env.NODE_ENV !== "production") {
   URL = "http://127.0.0.1:5000/api/v1";
