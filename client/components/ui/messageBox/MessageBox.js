@@ -34,17 +34,12 @@ const MessageBox = () => {
   const { data: messagesData, isLoading: messagesIsLoading } = useFetchMessages(
     activeChat.chatId
   );
-  const {
-    mutate: sendMessage,
-    isLoading: sendMessageLoading,
-    isSuccess: sendMessageSuccess,
-  } = useSendMessage();
+  const { mutate: sendMessage, isSuccess: sendMessageSuccess } =
+    useSendMessage();
   const { refetch: refetchChats } = useFetchChats();
-  const {
-    data: userData,
-    isSuccess: userDataSuccess,
-    isLoading: userDataLoading,
-  } = useFetchUser(activeChat.userId);
+  const { data: userData, isLoading: userDataLoading } = useFetchUser(
+    activeChat.userId
+  );
   const selectedUser = userData?.data?.user;
 
   useCloseDropdown({
