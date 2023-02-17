@@ -8,6 +8,7 @@ import { useForgotPassword } from "@/hooks/queries/useAuth";
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
 import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
+import { withPublic } from "@/hooks/routes";
 
 const ForgotPasswordPage = () => {
   const setUserEmail = useStore((state) => state.setUserEmail);
@@ -77,4 +78,4 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default withPublic(ForgotPasswordPage);

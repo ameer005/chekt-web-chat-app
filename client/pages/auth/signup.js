@@ -9,6 +9,7 @@ import useStore from "@/store/useStore";
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
 import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
+import { withPublic } from "@/hooks/routes";
 
 const signup = () => {
   const setUserEmail = useStore((state) => state.setUserEmail);
@@ -124,4 +125,4 @@ const signup = () => {
   );
 };
 
-export default signup;
+export default withPublic(signup);

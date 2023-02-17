@@ -72,8 +72,6 @@ const removeUser = (userId) => {
 };
 
 io.on("connection", (socket) => {
-  console.log("user connected");
-
   socket.on("add-users", (userData) => {
     addUser(userData, socket.id);
     io.emit("get-users", users);

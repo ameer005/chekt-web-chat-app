@@ -8,6 +8,7 @@ import useStore from "@/store/useStore";
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
 import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
+import { withPublic } from "@/hooks/routes";
 
 const ChangePasswordPage = () => {
   const userEmail = useStore((state) => state.email);
@@ -49,9 +50,6 @@ const ChangePasswordPage = () => {
             </div>
             <div className="mb-7 text-base font-medium">
               <p className="mb-[-2px]">Change password</p>
-              {/* <p className="text-colorGray">
-                Sign in with your credential below
-              </p> */}
             </div>
 
             {/* form */}
@@ -88,13 +86,6 @@ const ChangePasswordPage = () => {
               </button>
             </form>
 
-            {/* bottom section */}
-            {/* <div className="flex items-center gap-4 font-medium mb-5">
-              <div className="flex-1 h-[2px] bg-colorGray"></div>
-              <div>Or</div>
-              <div className="flex-1 h-[2px] bg-colorGray"></div>
-            </div> */}
-
             <div className="flex flex-col items-center gap-2 text-center font-medium">
               <div>Didn't get the otp?</div>
               <button>resend</button>
@@ -106,4 +97,4 @@ const ChangePasswordPage = () => {
   );
 };
 
-export default ChangePasswordPage;
+export default withPublic(ChangePasswordPage);

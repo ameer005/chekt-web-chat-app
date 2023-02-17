@@ -13,6 +13,7 @@ import {
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
 import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
+import { withPublic } from "@/hooks/routes";
 const ActivateAccountPage = () => {
   const userEmail = useStore((state) => state.email);
   const { mutate: activateAccount, isLoading: activateAccountLoading } =
@@ -58,9 +59,6 @@ const ActivateAccountPage = () => {
             </div>
             <div className="mb-7 text-base font-medium">
               <p className="mb-[-2px]">Activate your account</p>
-              {/* <p className="text-colorGray">
-                Sign in with your credential below
-              </p> */}
             </div>
 
             {/* form */}
@@ -87,13 +85,6 @@ const ActivateAccountPage = () => {
               </button>
             </form>
 
-            {/* bottom section */}
-            {/* <div className="flex items-center gap-4 font-medium mb-5">
-              <div className="flex-1 h-[2px] bg-colorGray"></div>
-              <div>Or</div>
-              <div className="flex-1 h-[2px] bg-colorGray"></div>
-            </div> */}
-
             <div className="flex flex-col items-center gap-2 text-center font-medium">
               {resendCodeLoading ? (
                 <LoadingCircle />
@@ -113,4 +104,4 @@ const ActivateAccountPage = () => {
   );
 };
 
-export default ActivateAccountPage;
+export default withPublic(ActivateAccountPage);

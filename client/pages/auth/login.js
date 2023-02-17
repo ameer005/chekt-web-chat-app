@@ -9,6 +9,7 @@ import useStore from "@/store/useStore";
 import InputField from "@/components/form/InputField";
 import Logo from "@/components/ui/logo/Logo";
 import LoadingCircle from "@/components/ui/LoadingSpinners/LoadingCircle";
+import { withPublic } from "@/hooks/routes";
 
 const LoginPage = () => {
   const setUserEmail = useStore((state) => state.setUserEmail);
@@ -107,4 +108,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default withPublic(LoginPage);

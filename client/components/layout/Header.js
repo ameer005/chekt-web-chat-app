@@ -45,8 +45,8 @@ const Header = () => {
         <Menu show={showMenu} setShow={setShowMenu}>
           <button
             onClick={() => {
-              router.push("/auth/login");
               removeUser();
+              router.push("/auth/login");
             }}
             className="hover:bg-colorBg ut-animation w-full px-6 py-2 text-start font-medium"
           >

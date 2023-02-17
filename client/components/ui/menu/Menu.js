@@ -8,7 +8,7 @@ const Menu = ({ children, show, setShow }) => {
   useCloseDropdown({ isOpen: show, setIsOpen: setShow, ref: menuRef });
 
   return (
-    <div className="relative">
+    <div className="relative -mb-[5px]">
       <button
         onClick={(e) => {
           e.stopPropagation();
