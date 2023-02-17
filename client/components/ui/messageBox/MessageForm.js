@@ -8,7 +8,7 @@ import { IoIosSend } from "react-icons/io";
 import { GrAttachment } from "react-icons/gr";
 import { BsEmojiSmile } from "react-icons/bs";
 
-const MessageForm = ({ selectedUser, setImagePreview }) => {
+const MessageForm = ({ setImagePreview }) => {
   const activeChat = useStore((state) => state.activeChat);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [value, setValue] = useState("");
@@ -42,7 +42,7 @@ const MessageForm = ({ selectedUser, setImagePreview }) => {
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("reciever", selectedUser._id);
+      formData.append("reciever", activeChat.userId);
       sendMessage({
         chatId: activeChat.chatId,
         data: formData,
@@ -56,7 +56,7 @@ const MessageForm = ({ selectedUser, setImagePreview }) => {
         chatId: activeChat.chatId,
         data: {
           text: value,
-          reciever: selectedUser._id,
+          reciever: activeChat.userId,
         },
       });
 
@@ -80,6 +80,12 @@ const MessageForm = ({ selectedUser, setImagePreview }) => {
           />
         </button>
         <textarea
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              submitForm();
+            }
+          }}
           onChange={(e) => setValue(e.target.value)}
           value={value}
           className="h-[3.5rem] flex-1 resize-none bg-transparent py-4 text-sm font-medium outline-none"

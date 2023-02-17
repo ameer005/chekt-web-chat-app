@@ -20,14 +20,9 @@ const Home = () => {
   const activeChat = useStore((state) => state.activeChat);
   const { refetch } = useFetchMe();
   const { refetch: refetchRequestList } = useFetchRequestsList();
-  const {
-    data: chatsData,
-    isLoading: chatsLoading,
-    refetch: refetchChats,
-  } = useFetchChats();
+  const { data: chatsData } = useFetchChats();
 
   useEffect(() => {
-    refetchChats();
     if (openSlideModal) {
       refetch();
       refetchRequestList();

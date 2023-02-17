@@ -50,6 +50,7 @@ const MessageCard = ({ data, nextData }) => {
                 alt={"image"}
                 src={data.file}
                 fill
+                sizes="h-full w-full object-contain"
                 className="h-full w-full object-contain"
               />
 
@@ -85,6 +86,7 @@ const MessageCard = ({ data, nextData }) => {
                 alt={"image"}
                 src={data.file}
                 fill
+                sizes="h-full w-full object-contain"
                 className="h-full w-full object-contain"
               />
 

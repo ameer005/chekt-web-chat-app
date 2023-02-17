@@ -11,6 +11,7 @@ const Avatar = ({ size = "h-10 w-10", img }) => {
         alt="user"
         src={img}
         fill
+        sizes="h-full w-full"
         className="h-full w-full"
       />
       {/* <img src={img} alt="avatar" className="h-full w-full" /> */}

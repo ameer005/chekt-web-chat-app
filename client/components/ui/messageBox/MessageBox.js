@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import { useFetchUser } from "@/hooks/queries/useUser";
 import { useFetchMessages } from "@/hooks/queries/useMessage";
 import { useFetchChats } from "@/hooks/queries/useChat";
 
@@ -22,10 +21,6 @@ const MessageBox = () => {
     activeChat.chatId
   );
   const { refetch: refetchChats } = useFetchChats();
-  const { data: userData, isLoading: userDataLoading } = useFetchUser(
-    activeChat.userId
-  );
-  const selectedUser = userData?.data?.user;
 
   useEffect(() => {
     scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
@@ -47,14 +42,14 @@ const MessageBox = () => {
   useEffect(() => {
     if (
       messages[messages.length - 1] &&
-      newMessage?.sender === selectedUser._id &&
+      newMessage?.sender === activeChat.userId &&
       newMessage?._id !== messages[messages.length - 1]._id
     ) {
       setMessages((prev) => [...prev, newMessage]);
     }
   }, [newMessage]);
 
-  if (messagesIsLoading || userDataLoading) {
+  if (messagesIsLoading) {
     return (
       <div className="absolute top-0 left-0 flex h-full w-full flex-col items-center justify-center">
         <LoadingCircleBig />
@@ -64,7 +59,7 @@ const MessageBox = () => {
 
   return (
     <div className="bg-colorBg absolute top-0 left-0 flex h-full w-full flex-col">
-      <MessageHeader selectedUser={selectedUser} />
+      <MessageHeader />
 
       {/* messages list box */}
       <div className=" bg-colorWhite scrollbar flex flex-1 flex-col gap-4 overflow-y-scroll px-6 pt-5">
@@ -76,12 +71,13 @@ const MessageBox = () => {
         {imagePreview && (
           <div className={`mb-4 flex`}>
             <div className="flex-1"></div>
-            <div className=" text-colorWhite r relative min-w-[4rem] max-w-[60%] self-end p-4 font-medium leading-5">
+            <div className=" text-colorWhite r relative min-w-[4rem] max-w-[60%] self-end bg-black p-4 font-medium leading-5">
               <div className="relative h-[15rem] w-[10rem]">
                 <Image
                   alt={"image"}
                   src={imagePreview}
                   fill
+                  sizes="h-full w-full object-contain"
                   className="h-full w-full object-contain"
                 />
                 <div className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]">
@@ -94,10 +90,7 @@ const MessageBox = () => {
       </div>
 
       {/* footer */}
-      <MessageForm
-        selectedUser={selectedUser}
-        setImagePreview={setImagePreview}
-      />
+      <MessageForm setImagePreview={setImagePreview} />
     </div>
   );
 };
