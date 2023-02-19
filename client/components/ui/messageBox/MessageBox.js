@@ -11,8 +11,8 @@ import MessageForm from "./MessageForm";
 import MessageHeader from "./MessageHeader";
 
 const MessageBox = () => {
-  const activeChat = useStore((state) => state.activeChat);
   const socket = useStore((state) => state.socket);
+  const activeChat = useStore((state) => state.activeChat);
   const [imagePreview, setImagePreview] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState(null);
@@ -23,7 +23,7 @@ const MessageBox = () => {
   const { refetch: refetchChats } = useFetchChats();
 
   useEffect(() => {
-    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+    scrollRef?.current?.scrollIntoView();
   }, [messagesData, messages]);
 
   useEffect(() => {

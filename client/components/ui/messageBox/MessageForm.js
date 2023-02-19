@@ -67,9 +67,9 @@ const MessageForm = ({ setImagePreview }) => {
   return (
     <form
       onSubmit={submitForm}
-      className="bg-colorWhite relative flex items-end gap-3 px-6 py-5"
+      className="bg-colorWhite relative flex items-end gap-3 px-6 py-5 sm:px-4"
     >
-      <label className="bg-colorBg flex flex-1 items-center gap-3 rounded-full px-6 sm:px-2">
+      <label className="bg-colorBg flex flex-1 items-center gap-3 rounded-full px-6 sm:gap-2 sm:px-4">
         <button type="button">
           <BsEmojiSmile
             onClick={(e) => {
