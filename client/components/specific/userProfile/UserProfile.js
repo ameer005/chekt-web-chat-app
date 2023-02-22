@@ -20,8 +20,8 @@ const UserProfile = () => {
   }, [image]);
 
   return (
-    <div className="mt-6 h-full">
-      <div className="flex justify-center">
+    <div className="mt-6 h-full ">
+      <div className="relative flex h-[12rem] justify-center">
         <div className="absolute ">
           <Avatar size="h-[12rem] w-[12rem]" img={user?.picture} />
           <label className="ut-animation absolute top-0 left-0 z-10 flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-black/0 text-transparent hover:bg-black/40 hover:text-white">
@@ -39,6 +39,10 @@ const UserProfile = () => {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="mt-2 flex justify-center">
+        <div className="text-2xl font-medium">{user.name}</div>
       </div>
 
       {showCropModal && (
