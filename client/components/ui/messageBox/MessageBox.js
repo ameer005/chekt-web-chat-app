@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import { useFetchMessages } from "@/hooks/queries/useMessage";
+import { useFetchInfiniteMessage } from "@/hooks/queries/useMessage";
 import { useFetchChats } from "@/hooks/queries/useChat";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
 import MessagesList from "@/components/lists/messages/MessagesList";
 import useStore from "@/store/useStore";
@@ -17,17 +18,41 @@ const MessageBox = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState(null);
   const scrollRef = useRef(null);
-  const { data: messagesData, isLoading: messagesIsLoading } = useFetchMessages(
-    activeChat.chatId
-  );
-  const { refetch: refetchChats } = useFetchChats();
 
+  const {
+    data: messagesData,
+    isLoading: messagesIsLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useFetchInfiniteMessage(activeChat.chatId);
+  const { refetch: refetchChats } = useFetchChats();
+  const lastItemRef = useInfiniteScroll({
+    isLoading: messagesIsLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  });
+
+  // TODO fixed this shit
+  useEffect(() => {
+    if (messagesData) {
+      setMessages([]);
+      messagesData?.pages.forEach((page) => {
+        setMessages((prev) => [...prev, ...page?.data.messages]);
+      });
+    }
+  }, [messagesData]);
+
+  // TODO testing if it'll work on leaving component
   useEffect(() => {
     scrollRef?.current?.scrollIntoView();
-  }, [messagesData, messages]);
+  }, []);
 
   useEffect(() => {
-    setMessages(messagesData?.data?.messages);
+    if (messagesData?.pages.length <= 2) {
+      scrollRef?.current?.scrollIntoView();
+    }
   }, [messagesData]);
 
   // listening to real incomming time message
@@ -45,8 +70,10 @@ const MessageBox = () => {
       newMessage?.sender === activeChat.userId &&
       newMessage?._id !== messages[messages.length - 1]._id
     ) {
-      setMessages((prev) => [...prev, newMessage]);
+      setMessages((prev) => [newMessage, ...prev]);
     }
+
+    scrollRef?.current?.scrollIntoView();
   }, [newMessage]);
 
   if (messagesIsLoading) {
@@ -64,6 +91,10 @@ const MessageBox = () => {
       {/* messages list box */}
       <div className=" bg-colorWhite scrollbar flex flex-1 flex-col gap-4 overflow-y-scroll px-6 pt-5">
         {/* <MessagesList /> */}
+        <div ref={lastItemRef}></div>
+        <div className="mt-4">
+          {(messagesIsLoading || isFetchingNextPage) && <LoadingCircleBig />}
+        </div>
         <MessagesList data={messages} />
         <div ref={scrollRef}></div>
 
@@ -90,7 +121,7 @@ const MessageBox = () => {
       </div>
 
       {/* footer */}
-      <MessageForm setImagePreview={setImagePreview} />
+      <MessageForm scrollRef={scrollRef} setImagePreview={setImagePreview} />
     </div>
   );
 };

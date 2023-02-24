@@ -7,22 +7,12 @@ import {
 } from "@tanstack/react-query";
 import useAxios from "../useAxios";
 
-// export const usefetchMessages = (chatId) => {
-//   const api = useAxios();
-
-//   const queryfnc = ({ queryKey }) => {
-//     return api.get(`/messages/${queryKey[1]}`);
-//   };
-
-//   return useQuery(["messages", chatId], queryfnc);
-// };
-
 export const useFetchInfiniteMessage = (chatId) => {
   const api = useAxios();
   const queryFnc = ({ queryKey, pageParam = 1 }) => {
     return api.get(`/messages/${queryKey[1]}?page=${pageParam}`, {
       params: {
-        limit: 7,
+        limit: 20,
       },
     });
   };
@@ -40,7 +30,11 @@ export const useFetchInfiniteMessage = (chatId) => {
 export const useFetchMessages = (chatId) => {
   const api = useAxios();
   const queryFnc = ({ queryKey }) => {
-    return api.get(`/messages/${queryKey[1]}`);
+    return api.get(`/messages/${queryKey[1]}`, {
+      params: {
+        sort: "-createdAt",
+      },
+    });
   };
 
   return useQuery(["messages", chatId], queryFnc);

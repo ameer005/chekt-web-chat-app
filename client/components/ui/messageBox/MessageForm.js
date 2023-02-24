@@ -8,7 +8,7 @@ import { IoIosSend } from "react-icons/io";
 import { GrAttachment } from "react-icons/gr";
 import { BsEmojiSmile } from "react-icons/bs";
 
-const MessageForm = ({ setImagePreview }) => {
+const MessageForm = ({ setImagePreview, scrollRef }) => {
   const activeChat = useStore((state) => state.activeChat);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [value, setValue] = useState("");
@@ -34,6 +34,7 @@ const MessageForm = ({ setImagePreview }) => {
     if (file) {
       submitForm();
     }
+    scrollRef?.current?.scrollIntoView();
   }, [sendMessageSuccess, file]);
 
   const submitForm = (e) => {

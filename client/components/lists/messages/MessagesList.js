@@ -12,7 +12,7 @@ const MessagesList = ({ data }) => {
       );
     });
   };
-  return <>{renderMessage()}</>;
+  return <>{renderMessage().reverse()}</>;
 };
 
 export default MessagesList;

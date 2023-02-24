@@ -52,21 +52,20 @@ exports.createMessage = catchAsync(async (req, res, next) => {
 
 exports.getAllMessages = catchAsync(async (req, res, next) => {
   const { chatId } = req.params;
-  // const limit = req.query.limit * 1 || 30;
-  // const page = req.query.page * 1 || 1;
-  // const totalMessage = await Message.countDocuments({ chatId });
-  // const totalPages = Math.ceil(totalMessage / limit);
+  const limit = req.query.limit * 1 || 30;
+  const page = req.query.page * 1 || 1;
+  const totalMessage = await Message.countDocuments({ chatId });
+  const totalPages = Math.ceil(totalMessage / limit);
 
-  // const features = new APIFeature(
-  //   Message.find({ chatId }),
-  //   req.query
-  // ).paginate();
+  const features = new APIFeature(Message.find({ chatId }), req.query)
+    .sort()
+    .paginate();
 
-  const messages = await Message.find({ chatId });
+  const messages = await features.query;
 
   res.status(200).json({
-    // page,
-    // totalPages,
+    page,
+    totalPages,
     results: messages.length,
     status: "success",
     messages,
