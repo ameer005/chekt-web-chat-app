@@ -36,7 +36,7 @@ exports.b2Upload = async (data) => {
       bucketId: process.env.B2_BUCKET_ID,
     });
 
-    const filename = `${crypto.randomUUID()}-${data.originalname}`;
+    const filename = `data.originalname`;
 
     await b2.uploadFile({
       uploadUrl: uploadUrl.uploadUrl,
@@ -46,7 +46,7 @@ exports.b2Upload = async (data) => {
       mime: data.mimetype,
     });
 
-    return `${process.env.IMAGE_URL}${filename}`;
+    return `${process.env.IMAGE_URL}hls/${filename}`;
   } catch (err) {
     console.log(err);
   }

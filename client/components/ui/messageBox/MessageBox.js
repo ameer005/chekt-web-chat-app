@@ -47,6 +47,10 @@ const MessageBox = () => {
   // TODO testing if it'll work on leaving component
   useEffect(() => {
     scrollRef?.current?.scrollIntoView();
+
+    return () => {
+      scrollRef?.current?.scrollIntoView();
+    };
   }, []);
 
   useEffect(() => {
